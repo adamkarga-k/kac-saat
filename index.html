@@ -18,7 +18,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Kaç Saat? - Ömür Muhasebesi">
   <meta name="twitter:description" content="Harcadığın paranın ömründen bedeli. Hazırlayan: adamkarga">
-  
+
   <!-- Google Fonts: Plus Jakarta Sans & Newsreader for warm editorial touches -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,8 +86,16 @@
       box-shadow: 0 4px 20px -2px rgba(24, 24, 27, 0.05), 0 2px 6px -1px rgba(24, 24, 27, 0.02);
     }
     .modal-backdrop {
-      background-color: rgba(24, 24, 27, 0.45);
+      background-color: rgba(24, 24, 27, 0.5);
       backdrop-filter: blur(4px);
+    }
+    /* Hide scrollbar for clean carousel */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
   </style>
 </head>
@@ -111,14 +119,21 @@
         </div>
       </div>
 
-      <!-- Quick Edit Salary Button (Always available in header) -->
-      <button id="openSalaryModalBtn" type="button" class="text-xs font-semibold text-ink-700 bg-surface hover:bg-ink-100 border border-ink-200 rounded-xl px-3 py-2 transition-all active:scale-95 shadow-sm flex items-center gap-1.5">
-        <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-        </svg>
-        <span class="hidden sm:inline">Maaş & Mesai</span>
-        <span class="sm:hidden">Maaş</span>
-      </button>
+      <!-- Header Action Buttons: Hakkında & Maaş Ayarları -->
+      <div class="flex items-center gap-1.5">
+        <button id="openAboutModalBtn" type="button" title="Hakkında & Felsefe" class="text-xs font-semibold text-ink-600 hover:text-ink-900 bg-surface hover:bg-ink-100 border border-ink-200 rounded-xl px-2.5 py-2 transition-all active:scale-95 shadow-sm flex items-center gap-1">
+          <span>💡</span>
+          <span class="hidden sm:inline">Hakkında</span>
+        </button>
+
+        <button id="openSalaryModalBtn" type="button" class="text-xs font-semibold text-ink-700 bg-surface hover:bg-ink-100 border border-ink-200 rounded-xl px-3 py-2 transition-all active:scale-95 shadow-sm flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+          </svg>
+          <span class="hidden sm:inline">Maaş & Mesai</span>
+          <span class="sm:hidden">Maaş</span>
+        </button>
+      </div>
     </header>
 
     <!-- COMPACT USER INCOME SUMMARY BAR (Shows when configured, hides excess clutter) -->
@@ -268,17 +283,27 @@
 
     </main>
 
-    <!-- FOOTER WITH USER CREDITS -->
+    <!-- FOOTER WITH USER CREDITS & PHILOSOPHY LINK -->
     <footer class="mt-8 pt-4 border-t border-ink-200/80 text-center text-xs text-ink-500">
-      <p class="font-medium">
+      <div class="flex items-center justify-center gap-3 mb-1.5">
+        <button id="footerAboutBtn" type="button" class="hover:text-ink-800 font-medium underline transition">Neden Kaç Saat?</button>
+        <span>&bull;</span>
+        <span>Reklamsız &bull; Sıfır Veri Toplama</span>
+      </div>
+      <p class="font-medium text-ink-600">
         Hazırlayan: 
         <a href="https://adamkarga.net" target="_blank" rel="noopener" class="font-bold text-ink-900 underline decoration-amber-500 hover:text-amber-700 transition">
           adamkarga
         </a>
       </p>
-      <p class="text-[11px] text-ink-400 mt-1">Verileriniz yalnızca tarayıcınızda saklanır. Reklamsız &bull; Ücretsiz</p>
     </footer>
 
+  </div>
+
+  <!-- TOAST NOTIFICATION POPUP -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-ink-900 text-white text-xs font-semibold py-2.5 px-4 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-2">
+    <span id="toastIcon">✓</span>
+    <span id="toastMsg">İşlem başarılı</span>
   </div>
 
   <!-- MODAL 1: SALARY & WORK SETTINGS -->
@@ -384,13 +409,13 @@
     </div>
   </div>
 
-  <!-- MODAL 3: INSTAGRAM STORY / SQUARE IMAGE GENERATOR -->
+  <!-- MODAL 3: INSTAGRAM STORY / SQUARE IMAGE GENERATOR (ENHANCED) -->
   <div id="shareModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 modal-backdrop hidden overflow-y-auto">
     <div class="bg-surface border border-ink-200 w-full max-w-md rounded-3xl p-4 sm:p-5 soft-shadow relative my-auto">
       <div class="flex items-center justify-between pb-3 mb-3 border-b border-ink-100">
         <div>
-          <h3 class="font-bold text-sm text-ink-900">Görsel Paylaşım Oluşturucu</h3>
-          <p class="text-[11px] text-ink-500">Instagram, WhatsApp veya X için hazırla</p>
+          <h3 class="font-bold text-sm text-ink-900">Görsel Paylaşım Kartı</h3>
+          <p class="text-[11px] text-ink-500">Instagram, WhatsApp veya X için yüksek çözünürlüklü çıktı</p>
         </div>
         <button id="closeShareModalBtn" class="text-ink-400 hover:text-ink-700 text-base p-1">✕</button>
       </div>
@@ -410,13 +435,62 @@
         <canvas id="shareCanvas" class="max-h-[46vh] max-w-full rounded-xl shadow-md bg-white"></canvas>
       </div>
 
-      <!-- Download Button -->
-      <button id="downloadImageBtn" type="button" class="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs transition active:scale-95 flex items-center justify-center gap-2 shadow-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-        </svg>
-        <span>Görseli Cihaza İndir (PNG)</span>
-      </button>
+      <!-- Action Buttons: Download + Copy Image -->
+      <div class="grid grid-cols-2 gap-2">
+        <button id="downloadImageBtn" type="button" class="py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+          </svg>
+          <span>Görseli İndir (PNG)</span>
+        </button>
+        <button id="copyImageBtn" type="button" class="py-2.5 bg-surface hover:bg-ink-100 border border-ink-200 text-ink-800 rounded-xl font-bold text-xs transition active:scale-95 flex items-center justify-center gap-1.5">
+          <span>📋 Görseli Kopyala</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: HAKKINDA & FELSEFEMİZ -->
+  <div id="aboutModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden overflow-y-auto">
+    <div class="bg-surface border border-ink-200 w-full max-w-md rounded-3xl p-5 sm:p-6 soft-shadow relative my-auto">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-ink-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">⏳</span>
+          <h3 class="font-extrabold text-base text-ink-900">Neden "Kaç Saat?"</h3>
+        </div>
+        <button id="closeAboutModalBtn" class="text-ink-400 hover:text-ink-700 text-lg p-1">✕</button>
+      </div>
+
+      <div class="text-xs text-ink-700 space-y-3.5 leading-relaxed">
+        <blockquote class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-xl italic font-serif text-sm text-amber-950">
+          "Bir şey satın aldığınızda parayla değil, o parayı kazanmak için harcadığınız yaşam sürenizle ödersiniz. Ve ömrünüz, marketten tekrar satın alabileceğiniz bir şey değildir."
+          <span class="block text-right font-sans not-italic text-[11px] font-bold text-amber-800 mt-1">— José Mujica</span>
+        </blockquote>
+
+        <div>
+          <h4 class="font-bold text-ink-900 mb-1">🎯 Amacımız ve Felsefemiz</h4>
+          <p>
+            Modern tüketim dünyasında her an bir şeyler satın almaya teşvik ediliyoruz. Fiyat etiketleri gözümüze sadece soyut sayılar gibi görünüyor. Oysa o paranın arkasında; sabahın köründe çalan alarmlar, trafikte geçen saatler, iş stresi ve en değerlisi: <strong>asla geri gelmeyecek olan ömrünüz</strong> var.
+          </p>
+          <p class="mt-1.5">
+            <strong>Kaç Saat?</strong>, harcamalarınızı kınamak için değil; satın almadan önce yüzünüzde tatlı bir tebessüm oluşturup gerçek bir finansal farkındalık kazandırmak için tasarlandı.
+          </p>
+        </div>
+
+        <div class="bg-ink-100/60 p-3 rounded-2xl">
+          <h4 class="font-bold text-ink-950 mb-1 flex items-center gap-1">
+            <span>🔒</span> Gizlilik Garantisi (Sıfır Veri)
+          </h4>
+          <p class="text-ink-600 text-[11px]">
+            Maaşınız, çalışma saatleriniz veya eklediğiniz harcama örnekleri <strong>asla hiçbir sunucuya gönderilmez</strong>. Tamamen kendi telefonunuzun/bilgisayarınızın yerel hafızasında saklanır.
+          </p>
+        </div>
+
+        <div class="pt-2 border-t border-ink-100 flex items-center justify-between text-xs">
+          <span class="text-ink-500">Tasarım & Geliştirme:</span>
+          <a href="https://adamkarga.net" target="_blank" rel="noopener" class="font-extrabold text-ink-900 underline decoration-amber-500 hover:text-amber-700">adamkarga.net</a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -474,9 +548,32 @@
       const formatSquareBtn = document.getElementById('formatSquareBtn');
       const shareCanvas = document.getElementById('shareCanvas');
       const downloadImageBtn = document.getElementById('downloadImageBtn');
+      const copyImageBtn = document.getElementById('copyImageBtn');
+
+      // About Modal Elements
+      const openAboutModalBtn = document.getElementById('openAboutModalBtn');
+      const footerAboutBtn = document.getElementById('footerAboutBtn');
+      const aboutModal = document.getElementById('aboutModal');
+      const closeAboutModalBtn = document.getElementById('closeAboutModalBtn');
+
+      // Toast Element
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastIcon = document.getElementById('toastIcon');
 
       let currentShareFormat = 'story'; // 'story' or 'square'
       let currentVerdictClean = '';
+
+      function showToast(msg, icon = '✓') {
+        toastMsg.textContent = msg;
+        toastIcon.textContent = icon;
+        toast.classList.remove('opacity-0', 'pointer-events-none');
+        toast.classList.add('opacity-100');
+        setTimeout(() => {
+          toast.classList.remove('opacity-100');
+          toast.classList.add('opacity-0', 'pointer-events-none');
+        }, 2200);
+      }
 
       // Default Built-in Presets
       const defaultPresets = [
@@ -596,6 +693,7 @@
               const filtered = getCustomPresets().filter(p => p.id !== delId);
               saveCustomPresets(filtered);
               renderPresets();
+              showToast('Örnek silindi', '🗑️');
               return;
             }
 
@@ -771,10 +869,26 @@
       saveSalaryModalBtn.addEventListener('click', () => {
         closeSalaryModal();
         calculate();
+        showToast('Maaş ve mesai bilgileri kaydedildi');
       });
 
       salaryModal.addEventListener('click', (e) => {
         if (e.target === salaryModal) closeSalaryModal();
+      });
+
+      // About Modal Handlers
+      function openAboutModal() {
+        aboutModal.classList.remove('hidden');
+      }
+      function closeAboutModal() {
+        aboutModal.classList.add('hidden');
+      }
+
+      openAboutModalBtn.addEventListener('click', openAboutModal);
+      footerAboutBtn.addEventListener('click', openAboutModal);
+      closeAboutModalBtn.addEventListener('click', closeAboutModal);
+      aboutModal.addEventListener('click', (e) => {
+        if (e.target === aboutModal) closeAboutModal();
       });
 
       // Add Custom Preset Modal Handlers
@@ -814,6 +928,7 @@
         productPriceInput.value = formatMoney(price);
         productNameInput.value = name;
         calculate();
+        showToast('Yeni harcama örneği listene eklendi');
       });
 
       // Copy Text Share
@@ -824,7 +939,7 @@
         const totalH = totalHoursDisplay.textContent.trim();
         const percent = salaryPercentDisplay.textContent.trim();
 
-        const shareText = `⏱️ Kaç Saat? - Ömür Bedeli\n\n` +
+        const shareText = `⏱️ Kaç Saat? - Ömür Muhasebesi\n\n` +
           `🏷️ Harcama: ${prod} (₺${price})\n` +
           `⏳ Mesai Karşılığı: ${breakdown}\n` +
           `⚡ Net Toplam: ${totalH}\n` +
@@ -835,6 +950,7 @@
         if (navigator.clipboard) {
           navigator.clipboard.writeText(shareText).then(() => {
             copyBtnText.textContent = '✓ Kopyalandı!';
+            showToast('Özet metin panoya kopyalandı');
             setTimeout(() => {
               copyBtnText.textContent = '📋 Metni Kopyala';
             }, 2500);
@@ -859,51 +975,53 @@
         ctx.fillRect(0, 0, width, height);
 
         // Decorative Warm Border Card
-        const margin = isStory ? 70 : 60;
+        const margin = isStory ? 70 : 50;
         const cardW = width - (margin * 2);
         const cardH = height - (margin * 2);
 
         ctx.fillStyle = '#ffffff';
         ctx.strokeStyle = '#e4e4e7';
         ctx.lineWidth = 3;
-        roundRect(ctx, margin, margin, cardW, cardH, 48, true, true);
+        roundRect(ctx, margin, margin, cardW, cardH, 44, true, true);
 
         // Header Pill
         ctx.fillStyle = '#fffbeb';
         ctx.strokeStyle = '#fde68a';
         ctx.lineWidth = 2;
-        roundRect(ctx, margin + 40, margin + (isStory ? 70 : 45), 240, 52, 26, true, true);
-        ctx.font = 'bold 22px Plus Jakarta Sans, sans-serif';
+        roundRect(ctx, margin + 40, margin + (isStory ? 65 : 35), 250, 48, 24, true, true);
+        ctx.font = 'bold 20px Plus Jakarta Sans, sans-serif';
         ctx.fillStyle = '#92400e';
-        ctx.fillText('⏳ Ömür Muhasebesi', margin + 65, margin + (isStory ? 104 : 79));
+        ctx.fillText('⏳ Ömür Muhasebesi', margin + 65, margin + (isStory ? 97 : 67));
 
-        // App Name
-        ctx.font = '800 38px Plus Jakarta Sans, sans-serif';
+        // App Name Branding
+        ctx.font = '800 36px Plus Jakarta Sans, sans-serif';
         ctx.fillStyle = '#18181b';
-        ctx.fillText('Kaç Saat?', margin + cardW - 220, margin + (isStory ? 105 : 80));
+        ctx.fillText('Kaç Saat?', margin + cardW - 220, margin + (isStory ? 98 : 68));
 
-        let currentY = margin + (isStory ? 220 : 160);
+        let currentY = margin + (isStory ? 190 : 135);
 
         // Product Name & Price
         const prod = productNameInput.value.trim() || 'Bu Harcama';
         const price = productPriceInput.value || '0';
 
-        ctx.font = '600 28px Plus Jakarta Sans, sans-serif';
+        ctx.font = '600 24px Plus Jakarta Sans, sans-serif';
         ctx.fillStyle = '#71717a';
-        ctx.fillText('Harcama & Fiyat:', margin + 50, currentY);
-
-        currentY += 50;
-        ctx.font = '800 52px Plus Jakarta Sans, sans-serif';
-        ctx.fillStyle = '#18181b';
-        ctx.fillText(`${prod}`, margin + 50, currentY);
+        ctx.fillText('HARCAMA & BEDELİ:', margin + 50, currentY);
 
         currentY += 46;
-        ctx.font = '800 42px Plus Jakarta Sans, sans-serif';
+        ctx.font = '800 48px Plus Jakarta Sans, sans-serif';
+        ctx.fillStyle = '#18181b';
+        // Truncate long product name if needed
+        let shortProd = prod.length > 28 ? prod.substring(0, 26) + '...' : prod;
+        ctx.fillText(shortProd, margin + 50, currentY);
+
+        currentY += 42;
+        ctx.font = '800 40px Plus Jakarta Sans, sans-serif';
         ctx.fillStyle = '#d97706';
         ctx.fillText(`₺${price}`, margin + 50, currentY);
 
         // Divider
-        currentY += 35;
+        currentY += 28;
         ctx.strokeStyle = '#f4f4f5';
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -912,57 +1030,59 @@
         ctx.stroke();
 
         // 1. Result Breakdown (Days & Hours)
-        currentY += 55;
-        ctx.font = '600 26px Plus Jakarta Sans, sans-serif';
+        currentY += (isStory ? 50 : 38);
+        ctx.font = '600 24px Plus Jakarta Sans, sans-serif';
         ctx.fillStyle = '#71717a';
         ctx.fillText('Çalışma Mesaisi Olarak:', margin + 50, currentY);
 
-        currentY += 55;
-        ctx.font = '800 58px Plus Jakarta Sans, sans-serif';
+        currentY += (isStory ? 52 : 44);
+        ctx.font = '800 54px Plus Jakarta Sans, sans-serif';
         ctx.fillStyle = '#18181b';
         ctx.fillText(breakdownDisplay.textContent.trim(), margin + 50, currentY);
 
         // 2. Net Total Hours Highlight Card
-        currentY += (isStory ? 55 : 35);
-        const boxH = isStory ? 180 : 140;
+        currentY += (isStory ? 45 : 30);
+        const boxH = isStory ? 170 : 130;
         ctx.fillStyle = '#fffbeb';
         ctx.strokeStyle = '#fcd34d';
         ctx.lineWidth = 2;
-        roundRect(ctx, margin + 50, currentY, cardW - 100, boxH, 28, true, true);
+        roundRect(ctx, margin + 50, currentY, cardW - 100, boxH, 26, true, true);
 
-        ctx.font = '700 24px Plus Jakarta Sans, sans-serif';
+        ctx.font = '700 22px Plus Jakarta Sans, sans-serif';
         ctx.fillStyle = '#78350f';
-        ctx.fillText('NET TOPLAM EMEĞİN:', margin + 80, currentY + 45);
+        ctx.fillText('NET TOPLAM EMEĞİN:', margin + 80, currentY + 40);
 
-        ctx.font = '900 64px Plus Jakarta Sans, sans-serif';
+        ctx.font = '900 60px Plus Jakarta Sans, sans-serif';
         ctx.fillStyle = '#b45309';
-        ctx.fillText(totalHoursDisplay.textContent.trim(), margin + 80, currentY + (isStory ? 120 : 105));
+        ctx.fillText(totalHoursDisplay.textContent.trim(), margin + 80, currentY + (isStory ? 114 : 98));
 
-        currentY += boxH + (isStory ? 50 : 30);
+        currentY += boxH + (isStory ? 45 : 25);
 
         // Turkish Witty Verdict Box
-        const verdictBoxH = isStory ? 380 : 220;
+        const verdictBoxH = isStory ? 390 : 210;
         ctx.fillStyle = '#fafaf9';
         ctx.strokeStyle = '#e7e5e4';
-        roundRect(ctx, margin + 50, currentY, cardW - 100, verdictBoxH, 28, true, true);
+        roundRect(ctx, margin + 50, currentY, cardW - 100, verdictBoxH, 26, true, true);
 
-        ctx.font = 'bold 24px Plus Jakarta Sans, sans-serif';
+        ctx.font = 'bold 22px Plus Jakarta Sans, sans-serif';
         ctx.fillStyle = '#78350f';
-        ctx.fillText('🗣️ Eski Toprak Ne Diyor?', margin + 80, currentY + 46);
+        ctx.fillText('🗣️ Eski Toprak Ne Diyor?', margin + 80, currentY + 42);
 
-        ctx.font = 'italic 500 28px Georgia, serif';
+        const quoteFontSize = isStory ? 28 : 23;
+        const quoteLineHeight = isStory ? 42 : 34;
+        ctx.font = `italic 500 ${quoteFontSize}px Georgia, serif`;
         ctx.fillStyle = '#292524';
-        wrapText(ctx, `"${currentVerdictClean}"`, margin + 80, currentY + 95, cardW - 160, 42);
+        wrapText(ctx, `"${currentVerdictClean}"`, margin + 80, currentY + (isStory ? 92 : 80), cardW - 160, quoteLineHeight);
 
         // Footer in Card: Prepared by adamkarga.net
-        const footerY = margin + cardH - (isStory ? 60 : 45);
-        ctx.font = '600 24px Plus Jakarta Sans, sans-serif';
+        const footerY = margin + cardH - (isStory ? 55 : 35);
+        ctx.font = '600 22px Plus Jakarta Sans, sans-serif';
         ctx.fillStyle = '#a1a1aa';
         ctx.fillText('Hazırlayan:', margin + 50, footerY);
 
-        ctx.font = '800 26px Plus Jakarta Sans, sans-serif';
+        ctx.font = '800 24px Plus Jakarta Sans, sans-serif';
         ctx.fillStyle = '#18181b';
-        ctx.fillText('adamkarga (adamkarga.net)', margin + 185, footerY);
+        ctx.fillText('adamkarga (adamkarga.net)', margin + 175, footerY);
       }
 
       function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
@@ -1034,6 +1154,29 @@
         link.download = `omur-bedeli-${currentShareFormat}.png`;
         link.href = shareCanvas.toDataURL('image/png');
         link.click();
+        showToast('Görsel indirildi');
+      });
+
+      // Copy Image directly to Clipboard (for WhatsApp/Insta web)
+      copyImageBtn.addEventListener('click', () => {
+        shareCanvas.toBlob(blob => {
+          if (!blob) {
+            showToast('Görsel oluşturulamadı', '⚠️');
+            return;
+          }
+          if (navigator.clipboard && navigator.clipboard.write) {
+            navigator.clipboard.write([
+              new ClipboardItem({ 'image/png': blob })
+            ]).then(() => {
+              showToast('Görsel panoya kopyalandı! Doğrudan yapıştırabilirsiniz.');
+            }).catch(err => {
+              // Fallback to text copy or download
+              downloadImageBtn.click();
+            });
+          } else {
+            downloadImageBtn.click();
+          }
+        }, 'image/png');
       });
 
       // Load Saved Settings on Init
