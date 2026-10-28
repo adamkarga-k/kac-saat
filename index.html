@@ -984,105 +984,179 @@
         ctx.lineWidth = 3;
         roundRect(ctx, margin, margin, cardW, cardH, 44, true, true);
 
-        // Header Pill
+        // Top Header Section
+        const headerPillY = margin + (isStory ? 60 : 35);
         ctx.fillStyle = '#fffbeb';
         ctx.strokeStyle = '#fde68a';
         ctx.lineWidth = 2;
-        roundRect(ctx, margin + 40, margin + (isStory ? 65 : 35), 250, 48, 24, true, true);
+        roundRect(ctx, margin + 40, headerPillY, 240, 48, 24, true, true);
         ctx.font = 'bold 20px Plus Jakarta Sans, sans-serif';
         ctx.fillStyle = '#92400e';
-        ctx.fillText('⏳ Ömür Muhasebesi', margin + 65, margin + (isStory ? 97 : 67));
+        ctx.fillText('⏳ Ömür Muhasebesi', margin + 65, headerPillY + 31);
 
         // App Name Branding
         ctx.font = '800 36px Plus Jakarta Sans, sans-serif';
         ctx.fillStyle = '#18181b';
-        ctx.fillText('Kaç Saat?', margin + cardW - 220, margin + (isStory ? 98 : 68));
+        ctx.fillText('Kaç Saat?', margin + cardW - 220, headerPillY + 33);
 
-        let currentY = margin + (isStory ? 190 : 135);
-
-        // Product Name & Price
         const prod = productNameInput.value.trim() || 'Bu Harcama';
         const price = productPriceInput.value || '0';
 
-        ctx.font = '600 24px Plus Jakarta Sans, sans-serif';
-        ctx.fillStyle = '#71717a';
-        ctx.fillText('HARCAMA & BEDELİ:', margin + 50, currentY);
+        if (isStory) {
+          // ==============================
+          // 📱 STORY FORMAT (1080 x 1920)
+          // ==============================
+          // Product & Price
+          ctx.font = '700 24px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#71717a';
+          ctx.fillText('HARCAMA & BEDELİ:', margin + 50, 270);
 
-        currentY += 46;
-        ctx.font = '800 48px Plus Jakarta Sans, sans-serif';
-        ctx.fillStyle = '#18181b';
-        // Truncate long product name if needed
-        let shortProd = prod.length > 28 ? prod.substring(0, 26) + '...' : prod;
-        ctx.fillText(shortProd, margin + 50, currentY);
+          let shortProd = prod.length > 28 ? prod.substring(0, 26) + '...' : prod;
+          ctx.font = '800 52px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#18181b';
+          ctx.fillText(shortProd, margin + 50, 335);
 
-        currentY += 42;
-        ctx.font = '800 40px Plus Jakarta Sans, sans-serif';
-        ctx.fillStyle = '#d97706';
-        ctx.fillText(`₺${price}`, margin + 50, currentY);
+          ctx.font = '800 44px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#d97706';
+          ctx.fillText(`₺${price}`, margin + 50, 395);
 
-        // Divider
-        currentY += 28;
-        ctx.strokeStyle = '#f4f4f5';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(margin + 50, currentY);
-        ctx.lineTo(margin + cardW - 50, currentY);
-        ctx.stroke();
+          // Divider
+          ctx.strokeStyle = '#f4f4f5';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(margin + 50, 435);
+          ctx.lineTo(margin + cardW - 50, 435);
+          ctx.stroke();
 
-        // 1. Result Breakdown (Days & Hours)
-        currentY += (isStory ? 50 : 38);
-        ctx.font = '600 24px Plus Jakarta Sans, sans-serif';
-        ctx.fillStyle = '#71717a';
-        ctx.fillText('Çalışma Mesaisi Olarak:', margin + 50, currentY);
+          // 1. Result Breakdown (Days & Hours)
+          ctx.font = '700 26px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#71717a';
+          ctx.fillText('Çalışma Mesaisi Olarak:', margin + 50, 505);
 
-        currentY += (isStory ? 52 : 44);
-        ctx.font = '800 54px Plus Jakarta Sans, sans-serif';
-        ctx.fillStyle = '#18181b';
-        ctx.fillText(breakdownDisplay.textContent.trim(), margin + 50, currentY);
+          ctx.font = '800 62px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#18181b';
+          ctx.fillText(breakdownDisplay.textContent.trim(), margin + 50, 580);
 
-        // 2. Net Total Hours Highlight Card
-        currentY += (isStory ? 45 : 30);
-        const boxH = isStory ? 170 : 130;
-        ctx.fillStyle = '#fffbeb';
-        ctx.strokeStyle = '#fcd34d';
-        ctx.lineWidth = 2;
-        roundRect(ctx, margin + 50, currentY, cardW - 100, boxH, 26, true, true);
+          // 2. Net Total Hours Highlight Card
+          const boxY = 645;
+          const boxH = 210;
+          ctx.fillStyle = '#fffbeb';
+          ctx.strokeStyle = '#fcd34d';
+          ctx.lineWidth = 2;
+          roundRect(ctx, margin + 40, boxY, cardW - 80, boxH, 28, true, true);
 
-        ctx.font = '700 22px Plus Jakarta Sans, sans-serif';
-        ctx.fillStyle = '#78350f';
-        ctx.fillText('NET TOPLAM EMEĞİN:', margin + 80, currentY + 40);
+          ctx.font = '700 24px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#78350f';
+          ctx.fillText('NET TOPLAM EMEĞİN:', margin + 70, boxY + 52);
 
-        ctx.font = '900 60px Plus Jakarta Sans, sans-serif';
-        ctx.fillStyle = '#b45309';
-        ctx.fillText(totalHoursDisplay.textContent.trim(), margin + 80, currentY + (isStory ? 114 : 98));
+          ctx.font = '900 76px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#b45309';
+          ctx.fillText(totalHoursDisplay.textContent.trim(), margin + 70, boxY + 145);
 
-        currentY += boxH + (isStory ? 45 : 25);
+          // 3. Turkish Witty Verdict Box
+          const verdictBoxY = 920;
+          const verdictBoxH = 500;
+          ctx.fillStyle = '#fafaf9';
+          ctx.strokeStyle = '#e7e5e4';
+          ctx.lineWidth = 2;
+          roundRect(ctx, margin + 40, verdictBoxY, cardW - 80, verdictBoxH, 28, true, true);
 
-        // Turkish Witty Verdict Box
-        const verdictBoxH = isStory ? 390 : 210;
-        ctx.fillStyle = '#fafaf9';
-        ctx.strokeStyle = '#e7e5e4';
-        roundRect(ctx, margin + 50, currentY, cardW - 100, verdictBoxH, 26, true, true);
+          ctx.font = '800 24px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#78350f';
+          ctx.fillText('❝ ESKİ TOPRAK DİYOR Kİ', margin + 70, verdictBoxY + 55);
 
-        ctx.font = 'bold 22px Plus Jakarta Sans, sans-serif';
-        ctx.fillStyle = '#78350f';
-        ctx.fillText('🗣️ Eski Toprak Ne Diyor?', margin + 80, currentY + 42);
+          ctx.font = `italic 500 32px Georgia, serif`;
+          ctx.fillStyle = '#292524';
+          wrapText(ctx, `"${currentVerdictClean}"`, margin + 70, verdictBoxY + 125, cardW - 140, 48);
 
-        const quoteFontSize = isStory ? 28 : 23;
-        const quoteLineHeight = isStory ? 42 : 34;
-        ctx.font = `italic 500 ${quoteFontSize}px Georgia, serif`;
-        ctx.fillStyle = '#292524';
-        wrapText(ctx, `"${currentVerdictClean}"`, margin + 80, currentY + (isStory ? 92 : 80), cardW - 160, quoteLineHeight);
+          // Footer
+          const footerY = margin + cardH - 55;
+          ctx.font = '600 24px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#a1a1aa';
+          ctx.fillText('Hazırlayan:', margin + 50, footerY);
 
-        // Footer in Card: Prepared by adamkarga.net
-        const footerY = margin + cardH - (isStory ? 55 : 35);
-        ctx.font = '600 22px Plus Jakarta Sans, sans-serif';
-        ctx.fillStyle = '#a1a1aa';
-        ctx.fillText('Hazırlayan:', margin + 50, footerY);
+          ctx.font = '800 26px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#18181b';
+          ctx.fillText('adamkarga (adamkarga.net)', margin + 185, footerY);
 
-        ctx.font = '800 24px Plus Jakarta Sans, sans-serif';
-        ctx.fillStyle = '#18181b';
-        ctx.fillText('adamkarga (adamkarga.net)', margin + 175, footerY);
+        } else {
+          // ==============================
+          // 🖼️ SQUARE FORMAT (1080 x 1080)
+          // ==============================
+          // Product & Price
+          ctx.font = '700 20px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#71717a';
+          ctx.fillText('HARCAMA & BEDELİ:', margin + 45, 175);
+
+          let shortProd = prod.length > 28 ? prod.substring(0, 26) + '...' : prod;
+          ctx.font = '800 42px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#18181b';
+          ctx.fillText(shortProd, margin + 45, 225);
+
+          ctx.font = '800 36px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#d97706';
+          ctx.fillText(`₺${price}`, margin + 45, 275);
+
+          // Divider
+          ctx.strokeStyle = '#f4f4f5';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(margin + 45, 305);
+          ctx.lineTo(margin + cardW - 45, 305);
+          ctx.stroke();
+
+          // 1. Result Breakdown (Days & Hours)
+          // Label at Y=350, Text at Y=415 -> 65px difference, zero collision!
+          ctx.font = '700 20px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#71717a';
+          ctx.fillText('Çalışma Mesaisi Olarak:', margin + 45, 350);
+
+          ctx.font = '800 48px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#18181b';
+          ctx.fillText(breakdownDisplay.textContent.trim(), margin + 45, 415);
+
+          // 2. Net Total Hours Highlight Card
+          const boxY = 460;
+          const boxH = 140;
+          ctx.fillStyle = '#fffbeb';
+          ctx.strokeStyle = '#fcd34d';
+          ctx.lineWidth = 2;
+          roundRect(ctx, margin + 40, boxY, cardW - 80, boxH, 24, true, true);
+
+          ctx.font = '700 20px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#78350f';
+          ctx.fillText('NET TOPLAM EMEĞİN:', margin + 70, boxY + 42);
+
+          ctx.font = '900 60px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#b45309';
+          ctx.fillText(totalHoursDisplay.textContent.trim(), margin + 70, boxY + 108);
+
+          // 3. Turkish Witty Verdict Box
+          const verdictBoxY = 635;
+          const verdictBoxH = 270;
+          ctx.fillStyle = '#fafaf9';
+          ctx.strokeStyle = '#e7e5e4';
+          ctx.lineWidth = 2;
+          roundRect(ctx, margin + 40, verdictBoxY, cardW - 80, verdictBoxH, 24, true, true);
+
+          ctx.font = '800 20px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#78350f';
+          ctx.fillText('❝ ESKİ TOPRAK DİYOR Kİ', margin + 70, verdictBoxY + 44);
+
+          ctx.font = `italic 500 24px Georgia, serif`;
+          ctx.fillStyle = '#292524';
+          wrapText(ctx, `"${currentVerdictClean}"`, margin + 70, verdictBoxY + 86, cardW - 140, 36);
+
+          // Footer
+          const footerY = margin + cardH - 35;
+          ctx.font = '600 22px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#a1a1aa';
+          ctx.fillText('Hazırlayan:', margin + 45, footerY);
+
+          ctx.font = '800 24px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#18181b';
+          ctx.fillText('adamkarga (adamkarga.net)', margin + 170, footerY);
+        }
       }
 
       function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
