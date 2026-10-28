@@ -21,18 +21,6 @@ Kullanıcının aylık maaşı ve günlük çalışma saatine göre, almak isted
 
 ---
 
-### 🌐 GitHub Pages ile Ücretsiz Canlıya Alma
-
-Bu projeyi GitHub'a yükledikten sonra ücretsiz olarak yayına almak için:
-
-1. GitHub'da reponuzun sayfasına gidin.
-2. **Settings** (Ayarlar) sekmesine tıklayın.
-3. Sol menüden **Pages** bölümünü seçin.
-4. **Branch** kısmından `main` (veya `master`) dalını ve `/ (root)` dizinini seçip **Save** butonuna basın.
-5. Birkaç saniye içinde siteniz `https://kullaniciadiniz.github.io/kac-saat/` adresinde canlıya geçecektir!
-
----
-
 ### 👨‍💻 Hazırlayan
 
 * **adamkarga** — [adamkarga.net](https://adamkarga.net)
