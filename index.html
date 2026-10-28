@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kaç Saat? | Ömründen Kaç Saate Bedel?</title>
+  <meta name="description" content="Bir ürün alırken aslında para değil, ömründen kaç saat ve iş günü harcadığını hesaplayan esprili finansal farkındalık aracı.">
+  <meta name="theme-color" content="#fcfbf9">
+  
+  <!-- Favicon (Inline SVG - Zero 404s, Zero External Dependency) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏳</text></svg>">
+
+  <!-- OpenGraph / Social Sharing Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Kaç Saat? | Ömründen Kaç Saate Bedel?">
+  <meta property="og:description" content="Bir şey satın alırken parayla değil, ömrünle ödersin. Maaşına göre ürünün saat ve iş günü karşılığını hesapla.">
+  <meta property="og:url" content="https://adamkarga.net">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kaç Saat? - Ömür Muhasebesi">
+  <meta name="twitter:description" content="Harcadığın paranın ömründen bedeli. Hazırlayan: adamkarga">
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Newsreader for warm editorial touches -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@1,6..72,500;1,6..72,600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['Newsreader', 'Georgia', 'serif'],
+          },
+          colors: {
+            paper: '#fbfaf8',
+            surface: '#ffffff',
+            ink: {
+              900: '#18181b',
+              800: '#27272a',
+              700: '#3f3f46',
+              500: '#71717a',
+              400: '#a1a1aa',
+              200: '#e4e4e7',
+              100: '#f4f4f5'
+            },
+            terracotta: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              500: '#ea580c',
+              600: '#c2410c',
+            },
+            sage: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              600: '#15803d',
+              700: '#166534',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background-color: #fbfaf8;
+      color: #18181b;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+    .soft-shadow {
+      box-shadow: 0 4px 20px -2px rgba(24, 24, 27, 0.05), 0 2px 6px -1px rgba(24, 24, 27, 0.02);
+    }
+    .modal-backdrop {
+      background-color: rgba(24, 24, 27, 0.45);
+      backdrop-filter: blur(4px);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-100 selection:text-amber-900 antialiased">
+
+  <!-- Main Responsive Container (Mobile-first, beautifully centered on desktop) -->
+  <div class="w-full max-w-xl mx-auto px-4 sm:px-6 pt-5 pb-12 flex-1 flex flex-col">
+
+    <!-- Header Section -->
+    <header class="flex items-center justify-between pb-4 mb-3 border-b border-ink-200/80">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-700 flex items-center justify-center font-bold text-xl shadow-sm">
+          ⏳
+        </div>
+        <div>
+          <h1 class="font-extrabold text-xl tracking-tight text-ink-900 flex items-center gap-2">
+            Kaç Saat?
+            <span class="text-[11px] font-semibold tracking-normal text-amber-800 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded-full">Ömür Muhasebesi</span>
+          </h1>
+          <p class="text-xs text-ink-500 font-medium">Parayla değil, ömrünle ödediğin bedel</p>
+        </div>
+      </div>
+
+      <!-- Quick Edit Salary Button (Always available in header) -->
+      <button id="openSalaryModalBtn" type="button" class="text-xs font-semibold text-ink-700 bg-surface hover:bg-ink-100 border border-ink-200 rounded-xl px-3 py-2 transition-all active:scale-95 shadow-sm flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+        </svg>
+        <span class="hidden sm:inline">Maaş & Mesai</span>
+        <span class="sm:hidden">Maaş</span>
+      </button>
+    </header>
+
+    <!-- COMPACT USER INCOME SUMMARY BAR (Shows when configured, hides excess clutter) -->
+    <div id="salarySummaryBanner" class="bg-surface border border-ink-200/90 rounded-2xl p-3 mb-4 soft-shadow flex items-center justify-between transition-all">
+      <div class="flex items-center gap-2.5 overflow-hidden">
+        <div class="w-8 h-8 rounded-xl bg-ink-100 flex items-center justify-center text-sm shrink-0">💼</div>
+        <div class="text-xs truncate">
+          <span class="text-ink-500">Maaşım:</span>
+          <strong id="bannerSalaryText" class="text-ink-900 font-bold ml-1">45.000 ₺</strong>
+          <span class="text-ink-400 mx-1.5">•</span>
+          <span class="text-ink-500">Günde</span>
+          <strong id="bannerHoursText" class="text-ink-900 font-bold ml-1">8s</strong>
+          <span class="text-ink-400 mx-1.5">•</span>
+          <span class="text-ink-500">Saatlik:</span>
+          <strong id="bannerHourlyRateText" class="text-emerald-700 font-bold font-mono ml-1">₺255.68</strong>
+        </div>
+      </div>
+      <button id="editSalaryBannerBtn" class="text-xs font-bold text-amber-700 hover:text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg px-2.5 py-1.5 shrink-0 transition active:scale-95 ml-2">
+        Düzenle
+      </button>
+    </div>
+
+    <!-- MAIN INPUT: PRODUCT PRICE & NAME -->
+    <section class="bg-surface border border-ink-200 rounded-3xl p-4 sm:p-5 mb-4 soft-shadow transition-all">
+      <div class="flex items-center justify-between mb-2">
+        <label for="productPriceInput" class="text-xs font-bold uppercase tracking-wider text-ink-500 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+          Almak İstediğin Şeyin Fiyatı
+        </label>
+        <span class="text-[11px] text-ink-400 font-medium">Hemen hesaplar</span>
+      </div>
+
+      <!-- Price Input with Big Typography -->
+      <div class="relative flex items-center py-1">
+        <span class="text-3xl sm:text-4xl font-extrabold text-ink-400 mr-2 select-none">₺</span>
+        <input 
+          type="text" 
+          inputmode="numeric" 
+          id="productPriceInput" 
+          placeholder="0" 
+          value="15.000"
+          class="w-full bg-transparent text-4xl sm:text-5xl font-black tracking-tight text-ink-900 placeholder-ink-300 outline-none"
+        >
+        <button id="clearPriceBtn" type="button" title="Temizle" class="text-ink-400 hover:text-ink-600 p-2 text-sm rounded-xl">✕</button>
+      </div>
+
+      <!-- Optional Product Name Input -->
+      <div class="mt-2 pt-2.5 border-t border-ink-100 flex items-center gap-2">
+        <span class="text-xs text-ink-400 font-medium whitespace-nowrap">Harcama Adı:</span>
+        <input 
+          type="text" 
+          id="productNameInput" 
+          placeholder="İsteğe bağlı (örn: Yeni Telefon, Mont, Akşam Yemeği...)" 
+          class="w-full bg-transparent text-xs text-ink-700 placeholder-ink-400 outline-none font-medium"
+        >
+      </div>
+
+      <!-- PRESETS BAR (Repositioned & Custom Example Friendly) -->
+      <div class="mt-3.5 pt-3 border-t border-ink-100">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[11px] font-bold text-ink-500 uppercase tracking-wider">Hızlı Harcama Örnekleri</span>
+          <button id="openAddPresetBtn" type="button" class="text-[11px] font-bold text-amber-700 hover:text-amber-800 flex items-center gap-1 hover:underline">
+            <span>+ Kendi Örneğini Ekle</span>
+          </button>
+        </div>
+
+        <!-- Scrollable Preset Chips -->
+        <div id="presetsContainer" class="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PRIMARY RESULT CARD: DUAL TIME DISPLAY & WITTY VERDICT -->
+    <main id="resultCard" class="bg-surface border-2 border-ink-900/10 rounded-3xl p-5 sm:p-6 mb-4 soft-shadow relative overflow-hidden transition-all">
+
+      <div class="flex items-center justify-between text-xs font-semibold text-ink-500 mb-2">
+        <span id="productLabelDisplay" class="text-ink-800 font-bold text-sm truncate max-w-[220px]">Bu Harcama İçin</span>
+        <span class="text-amber-800 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wide">Ömür Faturası</span>
+      </div>
+
+      <!-- 1. DETAILED BREAKDOWN (X Gün, Y Saat) -->
+      <div class="my-2">
+        <div class="text-xs font-medium text-ink-500 mb-1">Mesai Olarak Karşılığı:</div>
+        <div id="breakdownDisplay" class="text-2xl sm:text-3xl font-extrabold text-ink-900 tracking-tight leading-tight">
+          7 iş günü, 2 saat
+        </div>
+      </div>
+
+      <!-- 2. NET TOTAL HOURS (Direct & Prominent) -->
+      <div class="mt-3 pt-3 border-t border-ink-100 bg-amber-50/60 -mx-5 sm:-mx-6 px-5 sm:px-6 py-2.5">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-amber-900/80">Net Toplam Emeğin:</div>
+        <div class="flex items-baseline gap-2 mt-0.5">
+          <span id="totalHoursDisplay" class="text-3xl sm:text-4xl font-black text-amber-900 font-mono tracking-tight">
+            58.7 Saat
+          </span>
+          <span id="totalMinutesDisplay" class="text-xs font-semibold text-ink-500">
+            (3.520 dakika kesintisiz çalışma)
+          </span>
+        </div>
+      </div>
+
+      <!-- Monthly Salary Progress Bar -->
+      <div class="mt-4 pt-2">
+        <div class="flex justify-between text-xs mb-1.5 font-medium">
+          <span class="text-ink-600">Aylık Maaşının Karşılığı</span>
+          <span id="salaryPercentDisplay" class="font-bold text-ink-900">%33.3</span>
+        </div>
+        <div class="w-full h-2.5 bg-ink-100 rounded-full overflow-hidden p-0.5">
+          <div id="salaryProgressBar" class="h-full bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 rounded-full transition-all duration-500" style="width: 33.3%"></div>
+        </div>
+      </div>
+
+      <!-- Dynamic Turkish Humor & Witty Verdict Box -->
+      <div id="verdictBox" class="mt-4 bg-paper border border-ink-200 rounded-2xl p-3.5 sm:p-4 text-xs leading-relaxed text-ink-800">
+        <div class="flex items-center gap-1.5 font-bold text-amber-900 text-xs mb-1">
+          <span class="text-sm">🗣️</span>
+          <span>Eski Toprak Ne Diyor?</span>
+        </div>
+        <p id="verdictText" class="font-serif italic text-sm text-ink-800 leading-normal">
+          "Nasreddin Hoca misali: 'Parayı veren düdüğü çalar' demişler ama bu düdük için tam 7 gün masa başında patronun kahrını çekeceksin. Düdüğün sesi o kadar güzel mi bari?"
+        </p>
+      </div>
+
+      <!-- Context Metric Badges -->
+      <div class="grid grid-cols-2 gap-2.5 mt-3 pt-3 border-t border-ink-100">
+        <div class="bg-ink-100/60 rounded-xl p-2.5">
+          <span class="text-[10px] text-ink-500 block font-medium">Hafta Sonu Dahil Geçen Süre</span>
+          <strong id="calendarTimeDisplay" class="text-xs font-bold text-ink-900">~1.4 Hafta</strong>
+        </div>
+        <div class="bg-ink-100/60 rounded-xl p-2.5">
+          <span class="text-[10px] text-ink-500 block font-medium">Dakikanın Değeri</span>
+          <strong id="minuteRateDisplay" class="text-xs font-bold text-emerald-800 font-mono">₺4.26 / dk</strong>
+        </div>
+      </div>
+
+      <!-- Action Buttons: Share & Image Generator -->
+      <div class="mt-4 pt-3 border-t border-ink-100 grid grid-cols-2 gap-2">
+        <button id="openShareModalBtn" type="button" class="py-2.5 px-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm">
+          <span>📸 Görsel Paylaş</span>
+          <span class="text-[10px] font-normal opacity-90">(Hikaye / Kare)</span>
+        </button>
+        <button id="copyShareBtn" type="button" class="py-2.5 px-3 bg-surface hover:bg-ink-100 border border-ink-200 text-ink-700 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95">
+          <span id="copyBtnText">📋 Metni Kopyala</span>
+        </button>
+      </div>
+
+    </main>
+
+    <!-- FOOTER WITH USER CREDITS -->
+    <footer class="mt-8 pt-4 border-t border-ink-200/80 text-center text-xs text-ink-500">
+      <p class="font-medium">
+        Hazırlayan: 
+        <a href="https://adamkarga.net" target="_blank" rel="noopener" class="font-bold text-ink-900 underline decoration-amber-500 hover:text-amber-700 transition">
+          adamkarga
+        </a>
+      </p>
+      <p class="text-[11px] text-ink-400 mt-1">Verileriniz yalnızca tarayıcınızda saklanır. Reklamsız &bull; Ücretsiz</p>
+    </footer>
+
+  </div>
+
+  <!-- MODAL 1: SALARY & WORK SETTINGS -->
+  <div id="salaryModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-surface border border-ink-200 w-full max-w-sm rounded-3xl p-5 sm:p-6 soft-shadow relative animate-in fade-in zoom-in-95 duration-150">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-ink-100">
+        <h3 class="font-bold text-base text-ink-900 flex items-center gap-2">
+          <span>💼</span> Maaş ve Mesai Ayarları
+        </h3>
+        <button id="closeSalaryModalBtn" class="text-ink-400 hover:text-ink-700 text-lg p-1">✕</button>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Monthly Salary -->
+        <div>
+          <label class="block text-xs font-bold text-ink-700 mb-1">Aylık Net Maaşın (₺)</label>
+          <div class="relative">
+            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-ink-400 text-sm">₺</span>
+            <input 
+              type="text" 
+              inputmode="numeric" 
+              id="salaryInput" 
+              value="45.000" 
+              class="w-full bg-ink-100/50 border border-ink-200 focus:border-amber-500 rounded-xl pl-8 pr-4 py-2.5 text-base font-bold text-ink-900 outline-none transition"
+            >
+          </div>
+          <p class="text-[10px] text-ink-400 mt-1">Hesaba yatan net tutar</p>
+        </div>
+
+        <!-- Daily Hours -->
+        <div>
+          <label class="block text-xs font-bold text-ink-700 mb-1">Günde Kaç Saat Çalışıyorsun?</label>
+          <div class="flex items-center bg-ink-100/60 border border-ink-200 rounded-xl px-2 py-1">
+            <button id="decHoursBtn" type="button" class="w-9 h-9 flex items-center justify-center text-ink-700 hover:bg-surface font-bold text-lg rounded-lg active:scale-95 transition">-</button>
+            <input 
+              type="number" 
+              id="dailyHoursInput" 
+              value="8" 
+              min="1" 
+              max="24" 
+              step="0.5" 
+              class="w-full bg-transparent text-center font-bold text-ink-900 text-base outline-none"
+            >
+            <button id="incHoursBtn" type="button" class="w-9 h-9 flex items-center justify-center text-ink-700 hover:bg-surface font-bold text-lg rounded-lg active:scale-95 transition">+</button>
+          </div>
+        </div>
+
+        <!-- Work Days Per Week -->
+        <div>
+          <label class="block text-xs font-bold text-ink-700 mb-1">Haftalık Çalışma Düzenin</label>
+          <select id="workDaysSelect" class="w-full bg-ink-100/60 border border-ink-200 focus:border-amber-500 rounded-xl px-3 py-2.5 text-sm font-semibold text-ink-900 outline-none">
+            <option value="5" selected>Haftada 5 Gün (~22 iş günü/ay)</option>
+            <option value="6">Haftada 6 Gün (~26 iş günü/ay)</option>
+            <option value="4">Haftada 4 Gün (~17 iş günü/ay)</option>
+            <option value="7">Her Gün (~30 gün/ay)</option>
+          </select>
+        </div>
+
+        <!-- Save Button -->
+        <button id="saveSalaryModalBtn" type="button" class="w-full py-3 bg-ink-900 hover:bg-black text-white rounded-xl font-bold text-sm transition active:scale-95 mt-2">
+          Kaydet ve Kapat
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: ADD CUSTOM PRESET -->
+  <div id="addPresetModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-surface border border-ink-200 w-full max-w-sm rounded-3xl p-5 soft-shadow relative">
+      <div class="flex items-center justify-between pb-2 mb-3 border-b border-ink-100">
+        <h3 class="font-bold text-sm text-ink-900 flex items-center gap-1.5">
+          <span>✨</span> Yeni Harcama Örneği Ekle
+        </h3>
+        <button id="closeAddPresetBtn" class="text-ink-400 hover:text-ink-700 text-base p-1">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-ink-700 mb-1">Örnek Harcama Adı</label>
+          <input 
+            type="text" 
+            id="customPresetNameInput" 
+            placeholder="Örn: PlayStation Oyunu, Sinema..." 
+            class="w-full bg-ink-100/50 border border-ink-200 focus:border-amber-500 rounded-xl px-3 py-2 text-sm font-semibold text-ink-900 outline-none"
+          >
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-ink-700 mb-1">Fiyatı (₺)</label>
+          <input 
+            type="text" 
+            inputmode="numeric" 
+            id="customPresetPriceInput" 
+            placeholder="Örn: 1.500" 
+            class="w-full bg-ink-100/50 border border-ink-200 focus:border-amber-500 rounded-xl px-3 py-2 text-sm font-semibold text-ink-900 outline-none"
+          >
+        </div>
+
+        <button id="saveCustomPresetBtn" type="button" class="w-full py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs transition active:scale-95">
+          Örneği Listeme Kaydet
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: INSTAGRAM STORY / SQUARE IMAGE GENERATOR -->
+  <div id="shareModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 modal-backdrop hidden overflow-y-auto">
+    <div class="bg-surface border border-ink-200 w-full max-w-md rounded-3xl p-4 sm:p-5 soft-shadow relative my-auto">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-ink-100">
+        <div>
+          <h3 class="font-bold text-sm text-ink-900">Görsel Paylaşım Oluşturucu</h3>
+          <p class="text-[11px] text-ink-500">Instagram, WhatsApp veya X için hazırla</p>
+        </div>
+        <button id="closeShareModalBtn" class="text-ink-400 hover:text-ink-700 text-base p-1">✕</button>
+      </div>
+
+      <!-- Format Selector: Story (9:16) vs Square (1:1) -->
+      <div class="flex items-center gap-2 mb-3 bg-ink-100 p-1 rounded-xl text-xs font-bold">
+        <button id="formatStoryBtn" class="flex-1 py-1.5 rounded-lg bg-surface text-ink-900 shadow-sm transition">
+          📱 Hikaye (9:16)
+        </button>
+        <button id="formatSquareBtn" class="flex-1 py-1.5 rounded-lg text-ink-500 hover:text-ink-900 transition">
+          🖼️ Kare Post (1:1)
+        </button>
+      </div>
+
+      <!-- Live Canvas Preview Box -->
+      <div class="bg-ink-100/70 rounded-2xl p-2 flex items-center justify-center max-h-[50vh] overflow-hidden mb-3 border border-ink-200">
+        <canvas id="shareCanvas" class="max-h-[46vh] max-w-full rounded-xl shadow-md bg-white"></canvas>
+      </div>
+
+      <!-- Download Button -->
+      <button id="downloadImageBtn" type="button" class="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs transition active:scale-95 flex items-center justify-center gap-2 shadow-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+        </svg>
+        <span>Görseli Cihaza İndir (PNG)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    (function () {
+      // Elements
+      const salaryInput = document.getElementById('salaryInput');
+      const dailyHoursInput = document.getElementById('dailyHoursInput');
+      const workDaysSelect = document.getElementById('workDaysSelect');
+      const decHoursBtn = document.getElementById('decHoursBtn');
+      const incHoursBtn = document.getElementById('incHoursBtn');
+      
+      const salarySummaryBanner = document.getElementById('salarySummaryBanner');
+      const bannerSalaryText = document.getElementById('bannerSalaryText');
+      const bannerHoursText = document.getElementById('bannerHoursText');
+      const bannerHourlyRateText = document.getElementById('bannerHourlyRateText');
+      const editSalaryBannerBtn = document.getElementById('editSalaryBannerBtn');
+      const openSalaryModalBtn = document.getElementById('openSalaryModalBtn');
+      const closeSalaryModalBtn = document.getElementById('closeSalaryModalBtn');
+      const saveSalaryModalBtn = document.getElementById('saveSalaryModalBtn');
+      const salaryModal = document.getElementById('salaryModal');
+
+      const productPriceInput = document.getElementById('productPriceInput');
+      const productNameInput = document.getElementById('productNameInput');
+      const clearPriceBtn = document.getElementById('clearPriceBtn');
+      const presetsContainer = document.getElementById('presetsContainer');
+
+      const productLabelDisplay = document.getElementById('productLabelDisplay');
+      const breakdownDisplay = document.getElementById('breakdownDisplay');
+      const totalHoursDisplay = document.getElementById('totalHoursDisplay');
+      const totalMinutesDisplay = document.getElementById('totalMinutesDisplay');
+      const salaryPercentDisplay = document.getElementById('salaryPercentDisplay');
+      const salaryProgressBar = document.getElementById('salaryProgressBar');
+      const verdictText = document.getElementById('verdictText');
+      const calendarTimeDisplay = document.getElementById('calendarTimeDisplay');
+      const minuteRateDisplay = document.getElementById('minuteRateDisplay');
+
+      const copyShareBtn = document.getElementById('copyShareBtn');
+      const copyBtnText = document.getElementById('copyBtnText');
+
+      // Custom Presets Modal Elements
+      const openAddPresetBtn = document.getElementById('openAddPresetBtn');
+      const addPresetModal = document.getElementById('addPresetModal');
+      const closeAddPresetBtn = document.getElementById('closeAddPresetBtn');
+      const customPresetNameInput = document.getElementById('customPresetNameInput');
+      const customPresetPriceInput = document.getElementById('customPresetPriceInput');
+      const saveCustomPresetBtn = document.getElementById('saveCustomPresetBtn');
+
+      // Share Modal Elements
+      const openShareModalBtn = document.getElementById('openShareModalBtn');
+      const shareModal = document.getElementById('shareModal');
+      const closeShareModalBtn = document.getElementById('closeShareModalBtn');
+      const formatStoryBtn = document.getElementById('formatStoryBtn');
+      const formatSquareBtn = document.getElementById('formatSquareBtn');
+      const shareCanvas = document.getElementById('shareCanvas');
+      const downloadImageBtn = document.getElementById('downloadImageBtn');
+
+      let currentShareFormat = 'story'; // 'story' or 'square'
+      let currentVerdictClean = '';
+
+      // Default Built-in Presets
+      const defaultPresets = [
+        { id: 'p1', name: 'Çay & Simit', price: 60, icon: '☕' },
+        { id: 'p2', name: 'Dışarıda Yemek', price: 450, icon: '🍔' },
+        { id: 'p3', name: 'Spor Ayakkabı', price: 3500, icon: '👟' },
+        { id: 'p4', name: 'Hafta Sonu Tatili', price: 12000, icon: '✈️' },
+        { id: 'p5', name: 'Akıllı Telefon', price: 65000, icon: '📱' },
+      ];
+
+      // Helper: parse clean number from formatted Turkish input (e.g. 45.000 -> 45000)
+      function parseNumber(val) {
+        if (!val) return 0;
+        const cleaned = val.toString().replace(/\./g, '').replace(/,/g, '.').replace(/[^0-9.]/g, '');
+        return parseFloat(cleaned) || 0;
+      }
+
+      // Helper: format number with dot thousands separator
+      function formatMoney(num) {
+        if (!num || isNaN(num) || num <= 0) return '';
+        return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+
+      // Turkish Humor & Anecdotes Engine based on hours needed
+      function getTurkishHumor(totalHours, fullDays, nameText, formattedTotalHours) {
+        if (totalHours <= 0.5) {
+          const list = [
+            `Nasreddin Hoca misali: 'Ye kürküm ye' dedirtecek bir masraf değil bu. Yaklaşık ${Math.round(totalHours * 60)} dakika helalinden çalış, gönül rahatlığıyla al. Bakkal bile bozuk ararken bu kadar düşünmüyor!`,
+            `Bektaşi'ye sormuşlar: 'Dünyada en tatlı şey nedir?' diye; 'Helal lokma' demiş. Yarım saatlik mesaiye helal olsun, afiyetle harca gitsin!`
+          ];
+          return list[Math.floor(Math.random() * list.length)];
+        } 
+        
+        if (totalHours <= 4) {
+          const list = [
+            `Atalarımız 'Ayağını yorganına göre uzat' demiş ama bu harcamada ayak dışarıda kalmaz; olsa olsa serçe parmağın üşür. ${Math.round(totalHours)} saatlik emeğine sağlık!`,
+            `Hoca göle maya çalmış ya hani 'Ya tutarsa?' diye... Bu harcama bütçeyi delmez ama günün yarısını buna vereceksin. Akşam eve dönerken vicdanın rahat olsun.`
+          ];
+          return list[Math.floor(Math.random() * list.length)];
+        }
+
+        if (fullDays < 1) {
+          const list = [
+            `Bir koca iş günün buharlaştı! Sabah kurduğun alarm, yoldaki trafik, patronun o malum bakışı... Hepsi bu harcama içindi. Değer diyorsan güle güle kullan!`,
+            `Temel'e sormuşlar: 'Günde kaç saat çalışıyorsun?' Temel demiş: 'Valla bazen çalışıyorum, bazen de paramın nereye gittiğine şaşırıyorum.' İşte tam o gündeyiz!`
+          ];
+          return list[Math.floor(Math.random() * list.length)];
+        }
+
+        if (fullDays < 4) {
+          const list = [
+            `Parayı veren düdüğü çalar demiş Hoca. Ama bu düdük için tam ${fullDays} gün masa başında ter döküp patronun kahrını çekeceksin. Düdüğün sesi o kadar güzel mi bari?`,
+            `Nasreddin Hoca eşeğe ters binmiş ya, 'Önümü göremesem de arkamı kolluyorum' diye. Sen de bunu alırken arkana iyi bak, ay sonu el sallıyor!`
+          ];
+          return list[Math.floor(Math.random() * list.length)];
+        }
+
+        if (fullDays < 15) {
+          const list = [
+            `Neredeyse yarım ay! Bektaşi'ye sormuşlar 'Ramazan nasıl geçti?' diye, 'O bana sorsun, iflahımı kesti' demiş. Bu harcama da maaşın iflahını kesecek gibi! ${formattedTotalHours} saat mesaiye gerçekten değer mi?`,
+            `Evliya Çelebi bu kadar yol gezmedi, sen bu kadar mesaiyi buna yatırıyorsun! Almadan önce bir gece yastığa başını koyup derin bir nefes al.`
+          ];
+          return list[Math.floor(Math.random() * list.length)];
+        }
+
+        if (fullDays <= 26) {
+          const list = [
+            `Bütün bir ayın emeği uçtu gitti! Hoca'nın kazanı bu sefer kesin öldü. Bir koca ayı sabahın köründe kalkıp sırf buna çalışmış olacaksın. 'Aç ayı oynamaz' derler ama sen bir ay bunun kutusuna bakıp doyacaksın gibi!`,
+            `Temel doktora gitmiş: 'Doktor bey, nereye dokunsam ağrıyor.' Doktor 'Parmağın kırık' demiş. Senin de cüzdan kırılmış haberin yok! Koca bir ay sadece buna gitti.`
+          ];
+          return list[Math.floor(Math.random() * list.length)];
+        }
+
+        // Over 1 month / Huge items
+        const list = [
+          `Amanın! Ayların emeği! Hoca'nın türbesindeki kilit bile bu harcamayı durduramaz. Ev sahibi kapıya dayanırsa 'Kira yerine ömrümden ${Math.round(fullDays / 22)} ay versem sayılır mı?' dersin artık!`,
+          `Atalarımız 'Damlaya damlaya göl olur' demişti ama bu doğrudan barajı patlattı! ${formattedTotalHours} saat çalışmak ne demek? Alıyorsan hayırlı olsun ama kalbine mukayyet ol!`
+        ];
+        return list[Math.floor(Math.random() * list.length)];
+      }
+
+      // Load & Render Presets
+      function getCustomPresets() {
+        try {
+          return JSON.parse(localStorage.getItem('ks_user_presets')) || [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveCustomPresets(list) {
+        localStorage.setItem('ks_user_presets', JSON.stringify(list));
+      }
+
+      function renderPresets() {
+        presetsContainer.innerHTML = '';
+        const customs = getCustomPresets();
+        const allPresets = [...defaultPresets, ...customs];
+
+        allPresets.forEach(preset => {
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'preset-chip whitespace-nowrap bg-ink-100 hover:bg-ink-200/80 border border-ink-200/80 rounded-xl px-2.5 py-1.5 text-ink-800 font-semibold active:scale-95 transition flex items-center gap-1.5 shrink-0';
+          
+          chip.innerHTML = `
+            <span>${preset.icon || '🏷️'}</span>
+            <span>${preset.name}</span>
+            <span class="text-ink-500 font-normal text-[11px]">(${formatMoney(preset.price)} ₺)</span>
+            ${preset.isCustom ? `<span data-del="${preset.id}" class="del-preset text-ink-400 hover:text-rose-600 font-bold ml-1 text-xs px-1">×</span>` : ''}
+          `;
+
+          chip.addEventListener('click', (e) => {
+            // Delete custom preset check
+            if (e.target.closest('.del-preset')) {
+              e.stopPropagation();
+              const delId = e.target.getAttribute('data-del');
+              const filtered = getCustomPresets().filter(p => p.id !== delId);
+              saveCustomPresets(filtered);
+              renderPresets();
+              return;
+            }
+
+            // Fill inputs nicely
+            productPriceInput.value = formatMoney(preset.price);
+            productNameInput.value = preset.name;
+            calculate();
+          });
+
+          presetsContainer.appendChild(chip);
+        });
+      }
+
+      // Calculation Core
+      function calculate() {
+        const salary = parseNumber(salaryInput.value);
+        const dailyHours = parseFloat(dailyHoursInput.value) || 8;
+        const workDaysPerWeek = parseInt(workDaysSelect.value) || 5;
+        const price = parseNumber(productPriceInput.value);
+        const prodName = productNameInput.value.trim();
+
+        // 52 weeks / 12 months = 4.333 weeks
+        const monthlyWorkDays = workDaysPerWeek * (52 / 12);
+        const monthlyTotalWorkHours = monthlyWorkDays * dailyHours;
+        const hourlyWage = monthlyTotalWorkHours > 0 ? salary / monthlyTotalWorkHours : 0;
+        const minuteWage = hourlyWage / 60;
+
+        // Update Header & Banner displays
+        bannerSalaryText.textContent = formatMoney(salary) + ' ₺';
+        bannerHoursText.textContent = dailyHours + 's';
+        bannerHourlyRateText.textContent = '₺' + (hourlyWage > 0 ? hourlyWage.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00');
+        minuteRateDisplay.textContent = '₺' + (minuteWage > 0 ? minuteWage.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00') + ' / dk';
+
+        // Update product label
+        if (prodName) {
+          productLabelDisplay.textContent = `"${prodName}" İçin`;
+        } else {
+          productLabelDisplay.textContent = 'Bu Harcama İçin';
+        }
+
+        if (hourlyWage <= 0 || price <= 0) {
+          breakdownDisplay.textContent = '0 saat';
+          totalHoursDisplay.textContent = '0 Saat';
+          totalMinutesDisplay.textContent = '(0 dakika)';
+          salaryPercentDisplay.textContent = '%0';
+          salaryProgressBar.style.width = '0%';
+          calendarTimeDisplay.textContent = '0 gün';
+          verdictText.textContent = 'Lütfen geçerli bir maaş ve harcama fiyatı girin.';
+          currentVerdictClean = '';
+          return;
+        }
+
+        // Required total hours for this product
+        const totalHoursNeeded = price / hourlyWage;
+        const totalMinutesNeeded = Math.round(totalHoursNeeded * 60);
+
+        // 1. DUAL DISPLAY: NET TOTAL HOURS (Direct & precise)
+        let formattedTotalHours = totalHoursNeeded >= 100 
+          ? Math.round(totalHoursNeeded).toLocaleString('tr-TR')
+          : totalHoursNeeded.toLocaleString('tr-TR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+        totalHoursDisplay.textContent = `${formattedTotalHours} Saat`;
+        totalMinutesDisplay.textContent = `(${totalMinutesNeeded.toLocaleString('tr-TR')} dakika kesintisiz çalışma)`;
+
+        // 2. DUAL DISPLAY: BREAKDOWN (X gün, Y saat, Z dakika)
+        const fullDays = Math.floor(totalHoursNeeded / dailyHours);
+        const remainingHoursExact = totalHoursNeeded % dailyHours;
+        const remainingHours = Math.floor(remainingHoursExact);
+        const remainingMinutes = Math.round((remainingHoursExact - remainingHours) * 60);
+
+        let breakdownParts = [];
+        if (fullDays > 0) breakdownParts.push(`${fullDays} iş günü`);
+        if (remainingHours > 0) breakdownParts.push(`${remainingHours} saat`);
+        if (remainingMinutes > 0 && fullDays < 3) breakdownParts.push(`${remainingMinutes} dakika`);
+
+        if (breakdownParts.length === 0) {
+          breakdownDisplay.textContent = totalMinutesNeeded + ' dakika';
+        } else {
+          breakdownDisplay.textContent = breakdownParts.join(', ');
+        }
+
+        // Salary Percentage
+        const salaryPercent = (price / salary) * 100;
+        salaryPercentDisplay.textContent = salaryPercent >= 100 
+          ? `%${Math.round(salaryPercent)} (Maaşı aşıyor!)` 
+          : `%${salaryPercent.toFixed(1)}`;
+        salaryProgressBar.style.width = `${Math.min(salaryPercent, 100)}%`;
+
+        // Calendar duration estimation (with weekends)
+        const calendarDays = (fullDays / workDaysPerWeek) * 7 + (fullDays % workDaysPerWeek);
+        if (calendarDays < 1) {
+          calendarTimeDisplay.textContent = 'Aynı gün içinde';
+        } else if (calendarDays < 7) {
+          calendarTimeDisplay.textContent = `~${Math.round(calendarDays)} Gün`;
+        } else if (calendarDays < 30) {
+          calendarTimeDisplay.textContent = `~${(calendarDays / 7).toFixed(1)} Hafta`;
+        } else {
+          calendarTimeDisplay.textContent = `~${(calendarDays / 30.4).toFixed(1)} Ay`;
+        }
+
+        // Humor & Verdict generator
+        const displayName = prodName ? `"${prodName}"` : 'bu harcama';
+        currentVerdictClean = getTurkishHumor(totalHoursNeeded, fullDays, displayName, formattedTotalHours);
+        verdictText.textContent = `"${currentVerdictClean}"`;
+
+        // Save preferences
+        localStorage.setItem('ks_salary', parseNumber(salaryInput.value));
+        localStorage.setItem('ks_daily_hours', dailyHoursInput.value);
+        localStorage.setItem('ks_work_days', workDaysSelect.value);
+      }
+
+      // Money Input auto-formatting without forcing stale preset names
+      function bindMoneyInput(inputEl, isProductPrice = false) {
+        inputEl.addEventListener('input', function() {
+          if (this.value.trim() === '') {
+            calculate();
+            return;
+          }
+          const raw = parseNumber(this.value);
+          const cursorPos = this.selectionStart;
+          const prevLen = this.value.length;
+          this.value = formatMoney(raw);
+          const newLen = this.value.length;
+          const newPos = Math.max(0, cursorPos + (newLen - prevLen));
+          this.setSelectionRange(newPos, newPos);
+          
+          calculate();
+        });
+      }
+
+      bindMoneyInput(salaryInput);
+      bindMoneyInput(productPriceInput, true);
+
+      // Clear product name when clear button clicked
+      clearPriceBtn.addEventListener('click', () => {
+        productPriceInput.value = '';
+        productNameInput.value = '';
+        productPriceInput.focus();
+        calculate();
+      });
+
+      productNameInput.addEventListener('input', calculate);
+      dailyHoursInput.addEventListener('input', calculate);
+      workDaysSelect.addEventListener('change', calculate);
+
+      // Daily hours +/-
+      decHoursBtn.addEventListener('click', () => {
+        let cur = parseFloat(dailyHoursInput.value) || 8;
+        if (cur > 1) {
+          dailyHoursInput.value = Math.max(1, cur - 0.5);
+          calculate();
+        }
+      });
+      incHoursBtn.addEventListener('click', () => {
+        let cur = parseFloat(dailyHoursInput.value) || 8;
+        if (cur < 24) {
+          dailyHoursInput.value = Math.min(24, cur + 0.5);
+          calculate();
+        }
+      });
+
+      // Salary Modal Handlers
+      function openSalaryModal() {
+        salaryModal.classList.remove('hidden');
+      }
+      function closeSalaryModal() {
+        salaryModal.classList.add('hidden');
+      }
+
+      openSalaryModalBtn.addEventListener('click', openSalaryModal);
+      editSalaryBannerBtn.addEventListener('click', openSalaryModal);
+      closeSalaryModalBtn.addEventListener('click', closeSalaryModal);
+      saveSalaryModalBtn.addEventListener('click', () => {
+        closeSalaryModal();
+        calculate();
+      });
+
+      salaryModal.addEventListener('click', (e) => {
+        if (e.target === salaryModal) closeSalaryModal();
+      });
+
+      // Add Custom Preset Modal Handlers
+      openAddPresetBtn.addEventListener('click', () => {
+        customPresetNameInput.value = '';
+        customPresetPriceInput.value = '';
+        addPresetModal.classList.remove('hidden');
+        customPresetNameInput.focus();
+      });
+      closeAddPresetBtn.addEventListener('click', () => {
+        addPresetModal.classList.add('hidden');
+      });
+      addPresetModal.addEventListener('click', (e) => {
+        if (e.target === addPresetModal) addPresetModal.classList.add('hidden');
+      });
+
+      bindMoneyInput(customPresetPriceInput);
+
+      saveCustomPresetBtn.addEventListener('click', () => {
+        const name = customPresetNameInput.value.trim() || 'Özel Harcama';
+        const price = parseNumber(customPresetPriceInput.value);
+        if (price <= 0) return;
+
+        const customs = getCustomPresets();
+        customs.unshift({
+          id: 'cust_' + Date.now(),
+          name: name,
+          price: price,
+          icon: '🏷️',
+          isCustom: true
+        });
+        saveCustomPresets(customs);
+        renderPresets();
+        addPresetModal.classList.add('hidden');
+
+        // Apply immediately
+        productPriceInput.value = formatMoney(price);
+        productNameInput.value = name;
+        calculate();
+      });
+
+      // Copy Text Share
+      copyShareBtn.addEventListener('click', () => {
+        const prod = productNameInput.value.trim() || 'Bu harcama';
+        const price = productPriceInput.value || '0';
+        const breakdown = breakdownDisplay.textContent.trim();
+        const totalH = totalHoursDisplay.textContent.trim();
+        const percent = salaryPercentDisplay.textContent.trim();
+
+        const shareText = `⏱️ Kaç Saat? - Ömür Bedeli\n\n` +
+          `🏷️ Harcama: ${prod} (₺${price})\n` +
+          `⏳ Mesai Karşılığı: ${breakdown}\n` +
+          `⚡ Net Toplam: ${totalH}\n` +
+          `📊 Maaşın: ${percent}\n\n` +
+          `🗣️ Eski Toprak Diyor ki:\n"${currentVerdictClean}"\n\n` +
+          `Hazırlayan: adamkarga (https://adamkarga.net)`;
+
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(shareText).then(() => {
+            copyBtnText.textContent = '✓ Kopyalandı!';
+            setTimeout(() => {
+              copyBtnText.textContent = '📋 Metni Kopyala';
+            }, 2500);
+          });
+        }
+      });
+
+      // ==========================================
+      // CANVAS GENERATOR (Instagram Story & Square)
+      // ==========================================
+      function drawShareImage() {
+        const isStory = currentShareFormat === 'story';
+        const width = 1080;
+        const height = isStory ? 1920 : 1080;
+
+        shareCanvas.width = width;
+        shareCanvas.height = height;
+        const ctx = shareCanvas.getContext('2d');
+
+        // Background Warm Paper Tone
+        ctx.fillStyle = '#fbfaf8';
+        ctx.fillRect(0, 0, width, height);
+
+        // Decorative Warm Border Card
+        const margin = isStory ? 70 : 60;
+        const cardW = width - (margin * 2);
+        const cardH = height - (margin * 2);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#e4e4e7';
+        ctx.lineWidth = 3;
+        roundRect(ctx, margin, margin, cardW, cardH, 48, true, true);
+
+        // Header Pill
+        ctx.fillStyle = '#fffbeb';
+        ctx.strokeStyle = '#fde68a';
+        ctx.lineWidth = 2;
+        roundRect(ctx, margin + 40, margin + (isStory ? 70 : 45), 240, 52, 26, true, true);
+        ctx.font = 'bold 22px Plus Jakarta Sans, sans-serif';
+        ctx.fillStyle = '#92400e';
+        ctx.fillText('⏳ Ömür Muhasebesi', margin + 65, margin + (isStory ? 104 : 79));
+
+        // App Name
+        ctx.font = '800 38px Plus Jakarta Sans, sans-serif';
+        ctx.fillStyle = '#18181b';
+        ctx.fillText('Kaç Saat?', margin + cardW - 220, margin + (isStory ? 105 : 80));
+
+        let currentY = margin + (isStory ? 220 : 160);
+
+        // Product Name & Price
+        const prod = productNameInput.value.trim() || 'Bu Harcama';
+        const price = productPriceInput.value || '0';
+
+        ctx.font = '600 28px Plus Jakarta Sans, sans-serif';
+        ctx.fillStyle = '#71717a';
+        ctx.fillText('Harcama & Fiyat:', margin + 50, currentY);
+
+        currentY += 50;
+        ctx.font = '800 52px Plus Jakarta Sans, sans-serif';
+        ctx.fillStyle = '#18181b';
+        ctx.fillText(`${prod}`, margin + 50, currentY);
+
+        currentY += 46;
+        ctx.font = '800 42px Plus Jakarta Sans, sans-serif';
+        ctx.fillStyle = '#d97706';
+        ctx.fillText(`₺${price}`, margin + 50, currentY);
+
+        // Divider
+        currentY += 35;
+        ctx.strokeStyle = '#f4f4f5';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(margin + 50, currentY);
+        ctx.lineTo(margin + cardW - 50, currentY);
+        ctx.stroke();
+
+        // 1. Result Breakdown (Days & Hours)
+        currentY += 55;
+        ctx.font = '600 26px Plus Jakarta Sans, sans-serif';
+        ctx.fillStyle = '#71717a';
+        ctx.fillText('Çalışma Mesaisi Olarak:', margin + 50, currentY);
+
+        currentY += 55;
+        ctx.font = '800 58px Plus Jakarta Sans, sans-serif';
+        ctx.fillStyle = '#18181b';
+        ctx.fillText(breakdownDisplay.textContent.trim(), margin + 50, currentY);
+
+        // 2. Net Total Hours Highlight Card
+        currentY += (isStory ? 55 : 35);
+        const boxH = isStory ? 180 : 140;
+        ctx.fillStyle = '#fffbeb';
+        ctx.strokeStyle = '#fcd34d';
+        ctx.lineWidth = 2;
+        roundRect(ctx, margin + 50, currentY, cardW - 100, boxH, 28, true, true);
+
+        ctx.font = '700 24px Plus Jakarta Sans, sans-serif';
+        ctx.fillStyle = '#78350f';
+        ctx.fillText('NET TOPLAM EMEĞİN:', margin + 80, currentY + 45);
+
+        ctx.font = '900 64px Plus Jakarta Sans, sans-serif';
+        ctx.fillStyle = '#b45309';
+        ctx.fillText(totalHoursDisplay.textContent.trim(), margin + 80, currentY + (isStory ? 120 : 105));
+
+        currentY += boxH + (isStory ? 50 : 30);
+
+        // Turkish Witty Verdict Box
+        const verdictBoxH = isStory ? 380 : 220;
+        ctx.fillStyle = '#fafaf9';
+        ctx.strokeStyle = '#e7e5e4';
+        roundRect(ctx, margin + 50, currentY, cardW - 100, verdictBoxH, 28, true, true);
+
+        ctx.font = 'bold 24px Plus Jakarta Sans, sans-serif';
+        ctx.fillStyle = '#78350f';
+        ctx.fillText('🗣️ Eski Toprak Ne Diyor?', margin + 80, currentY + 46);
+
+        ctx.font = 'italic 500 28px Georgia, serif';
+        ctx.fillStyle = '#292524';
+        wrapText(ctx, `"${currentVerdictClean}"`, margin + 80, currentY + 95, cardW - 160, 42);
+
+        // Footer in Card: Prepared by adamkarga.net
+        const footerY = margin + cardH - (isStory ? 60 : 45);
+        ctx.font = '600 24px Plus Jakarta Sans, sans-serif';
+        ctx.fillStyle = '#a1a1aa';
+        ctx.fillText('Hazırlayan:', margin + 50, footerY);
+
+        ctx.font = '800 26px Plus Jakarta Sans, sans-serif';
+        ctx.fillStyle = '#18181b';
+        ctx.fillText('adamkarga (adamkarga.net)', margin + 185, footerY);
+      }
+
+      function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+        if (fill) ctx.fill();
+        if (stroke) ctx.stroke();
+      }
+
+      function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+        const words = text.split(' ');
+        let line = '';
+        let currentY = y;
+        for (let n = 0; n < words.length; n++) {
+          const testLine = line + words[n] + ' ';
+          const metrics = ctx.measureText(testLine);
+          if (metrics.width > maxWidth && n > 0) {
+            ctx.fillText(line, x, currentY);
+            line = words[n] + ' ';
+            currentY += lineHeight;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line, x, currentY);
+      }
+
+      // Share Modal Triggers
+      openShareModalBtn.addEventListener('click', () => {
+        shareModal.classList.remove('hidden');
+        drawShareImage();
+      });
+      closeShareModalBtn.addEventListener('click', () => {
+        shareModal.classList.add('hidden');
+      });
+      shareModal.addEventListener('click', (e) => {
+        if (e.target === shareModal) shareModal.classList.add('hidden');
+      });
+
+      formatStoryBtn.addEventListener('click', () => {
+        currentShareFormat = 'story';
+        formatStoryBtn.classList.add('bg-surface', 'text-ink-900', 'shadow-sm');
+        formatStoryBtn.classList.remove('text-ink-500');
+        formatSquareBtn.classList.remove('bg-surface', 'text-ink-900', 'shadow-sm');
+        formatSquareBtn.classList.add('text-ink-500');
+        drawShareImage();
+      });
+
+      formatSquareBtn.addEventListener('click', () => {
+        currentShareFormat = 'square';
+        formatSquareBtn.classList.add('bg-surface', 'text-ink-900', 'shadow-sm');
+        formatSquareBtn.classList.remove('text-ink-500');
+        formatStoryBtn.classList.remove('bg-surface', 'text-ink-900', 'shadow-sm');
+        formatStoryBtn.classList.add('text-ink-500');
+        drawShareImage();
+      });
+
+      downloadImageBtn.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.download = `omur-bedeli-${currentShareFormat}.png`;
+        link.href = shareCanvas.toDataURL('image/png');
+        link.click();
+      });
+
+      // Load Saved Settings on Init
+      function init() {
+        const savedSalary = localStorage.getItem('ks_salary');
+        const savedDailyHours = localStorage.getItem('ks_daily_hours');
+        const savedWorkDays = localStorage.getItem('ks_work_days');
+
+        if (savedSalary) {
+          salaryInput.value = formatMoney(parseFloat(savedSalary));
+        } else {
+          salaryInput.value = '45.000';
+        }
+        if (savedDailyHours) dailyHoursInput.value = savedDailyHours;
+        if (savedWorkDays) workDaysSelect.value = savedWorkDays;
+
+        renderPresets();
+        calculate();
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
