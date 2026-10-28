@@ -36,9 +36,10 @@ Sistem, kullanıcının aylık net kazancı ve haftalık çalışma temposu üze
 3. **Ürünün Ömür Bedeli:**
    $$\text{Gerekli Toplam Saat} = \frac{\text{Ürün Fiyatı}}{\text{Saatlik Değer}}$$
 
-### 🎯 İkili Çıktı Standardı
+### 🎯 İkili Çıktı Standardı & Gerçek Hayat Takvim Süresi
 Sistem sonucu kullanıcıya iki farklı perspektiften aynı anda sunar:
-* **Mesai Kırılımı:** `7 iş günü, 2 saat` *(Gündelik gerçekçi mesai algısı için)*
+* **Mesai Kırılımı:** `7 iş günü, 2 saat`
+  * 📅 **Gerçek Hayat Takvim Karşılığı:** Seçilen haftalık çalışma düzenine göre (hafta sonları dahil) gerçek ömrünüzden kaç hafta/ay gittiğini gösterir *(Örn: Haftada 5 gün çalışan birinde 25 iş günü = `1 ay, 1 hafta` olarak hesaplanır)*.
 * **Net Kesintisiz Saat:** `58.7 Saat` veya `3.520 Dakika` *(Harcanan zamanın mutlak büyüklüğünü kavramak için)*
 
 ---

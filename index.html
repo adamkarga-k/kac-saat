@@ -224,6 +224,11 @@
         <div id="breakdownDisplay" class="text-2xl sm:text-3xl font-extrabold text-ink-900 tracking-tight leading-tight">
           7 iş günü, 2 saat
         </div>
+        <!-- Real Life Calendar Time (Muted & Smaller) -->
+        <div id="calendarSubtextDisplay" class="text-xs font-medium text-ink-500 mt-1 flex items-center gap-1.5">
+          <span class="text-amber-700/80">📅</span>
+          <span>Gerçek hayatta: <strong id="calendarSubtextValue" class="text-ink-800 font-bold">1 hafta, 2 gün</strong> <span class="text-ink-400 font-normal">(hafta sonları dahil)</span></span>
+        </div>
       </div>
 
       <!-- 2. NET TOTAL HOURS (Direct & Prominent) -->
@@ -531,6 +536,7 @@
 
       const productLabelDisplay = document.getElementById('productLabelDisplay');
       const breakdownDisplay = document.getElementById('breakdownDisplay');
+      const calendarSubtextValue = document.getElementById('calendarSubtextValue');
       const totalHoursDisplay = document.getElementById('totalHoursDisplay');
       const totalMinutesDisplay = document.getElementById('totalMinutesDisplay');
       const salaryPercentDisplay = document.getElementById('salaryPercentDisplay');
@@ -574,6 +580,7 @@
 
       let currentShareFormat = 'story'; // 'story' or 'square'
       let currentVerdictClean = '';
+      let currentRealLifeText = '';
 
       function showToast(msg, icon = '✓') {
         toastMsg.textContent = msg;
@@ -780,7 +787,27 @@
           : `%${salaryPercent.toFixed(1)}`;
         salaryProgressBar.style.width = `${Math.min(salaryPercent, 100)}%`;
 
-        // Calendar duration estimation (with weekends)
+        // Real-life calendar duration (e.g. 25 iş günü -> 1 ay, 1 hafta)
+        function formatRealLifeCalendarTime(days, daysPerWeek) {
+          if (days <= 0) return 'Aynı gün içinde';
+          const fullWeeks = Math.floor(days / daysPerWeek);
+          const remDays = days % daysPerWeek;
+          if (fullWeeks === 0) {
+            return `${remDays} iş günü`;
+          }
+          const months = Math.floor(fullWeeks / 4);
+          const weeks = fullWeeks % 4;
+          let parts = [];
+          if (months > 0) parts.push(`${months} ay`);
+          if (weeks > 0) parts.push(`${weeks} hafta`);
+          if (remDays > 0) parts.push(`${remDays} gün`);
+          return parts.join(', ');
+        }
+
+        currentRealLifeText = formatRealLifeCalendarTime(fullDays, workDaysPerWeek);
+        calendarSubtextValue.textContent = currentRealLifeText;
+
+        // Calendar duration estimation for metric badge
         const calendarDays = (fullDays / workDaysPerWeek) * 7 + (fullDays % workDaysPerWeek);
         if (calendarDays < 1) {
           calendarTimeDisplay.textContent = 'Aynı gün içinde';
@@ -1058,11 +1085,16 @@
           // 1. Result Breakdown (Days & Hours)
           ctx.font = '700 26px Plus Jakarta Sans, sans-serif';
           ctx.fillStyle = '#71717a';
-          ctx.fillText('Çalışma Mesaisi Olarak:', margin + 50, 505);
+          ctx.fillText('Çalışma Mesaisi Olarak:', margin + 50, 490);
 
-          ctx.font = '800 62px Plus Jakarta Sans, sans-serif';
+          ctx.font = '800 60px Plus Jakarta Sans, sans-serif';
           ctx.fillStyle = '#18181b';
-          ctx.fillText(breakdownDisplay.textContent.trim(), margin + 50, 580);
+          ctx.fillText(breakdownDisplay.textContent.trim(), margin + 50, 555);
+
+          // Real-life calendar subtitle
+          ctx.font = '600 24px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#78716c';
+          ctx.fillText(`📅 Gerçek hayatta: ${currentRealLifeText} (hafta sonları dahil)`, margin + 50, 602);
 
           // 2. Net Total Hours Highlight Card
           const boxY = 645;
@@ -1133,18 +1165,22 @@
           ctx.stroke();
 
           // 1. Result Breakdown (Days & Hours)
-          // Label at Y=350, Text at Y=415 -> 65px difference, zero collision!
-          ctx.font = '700 20px Plus Jakarta Sans, sans-serif';
+          ctx.font = '700 19px Plus Jakarta Sans, sans-serif';
           ctx.fillStyle = '#71717a';
-          ctx.fillText('Çalışma Mesaisi Olarak:', margin + 45, 350);
+          ctx.fillText('Çalışma Mesaisi Olarak:', margin + 45, 340);
 
-          ctx.font = '800 48px Plus Jakarta Sans, sans-serif';
+          ctx.font = '800 46px Plus Jakarta Sans, sans-serif';
           ctx.fillStyle = '#18181b';
-          ctx.fillText(breakdownDisplay.textContent.trim(), margin + 45, 415);
+          ctx.fillText(breakdownDisplay.textContent.trim(), margin + 45, 395);
+
+          // Real-life calendar subtitle
+          ctx.font = '600 18px Plus Jakarta Sans, sans-serif';
+          ctx.fillStyle = '#78716c';
+          ctx.fillText(`📅 Gerçek hayatta: ${currentRealLifeText} (hafta sonları dahil)`, margin + 45, 430);
 
           // 2. Net Total Hours Highlight Card
-          const boxY = 460;
-          const boxH = 140;
+          const boxY = 465;
+          const boxH = 135;
           ctx.fillStyle = '#fffbeb';
           ctx.strokeStyle = '#fcd34d';
           ctx.lineWidth = 2;
@@ -1152,11 +1188,11 @@
 
           ctx.font = '700 20px Plus Jakarta Sans, sans-serif';
           ctx.fillStyle = '#78350f';
-          ctx.fillText('NET TOPLAM EMEĞİN:', margin + 70, boxY + 42);
+          ctx.fillText('NET TOPLAM EMEĞİN:', margin + 70, boxY + 40);
 
-          ctx.font = '900 60px Plus Jakarta Sans, sans-serif';
+          ctx.font = '900 58px Plus Jakarta Sans, sans-serif';
           ctx.fillStyle = '#b45309';
-          ctx.fillText(totalHoursDisplay.textContent.trim(), margin + 70, boxY + 108);
+          ctx.fillText(totalHoursDisplay.textContent.trim(), margin + 70, boxY + 104);
 
           // 3. Turkish Witty Verdict Box
           const verdictBoxY = 635;
