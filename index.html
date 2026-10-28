@@ -27,6 +27,9 @@
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
+  <!-- 333 Turkish Anecdotes & Witty Database -->
+  <script src="nukteler.js"></script>
+  
   <script>
     tailwind.config = {
       theme: {
@@ -249,9 +252,16 @@
 
       <!-- Dynamic Turkish Humor & Witty Verdict Box -->
       <div id="verdictBox" class="mt-4 bg-paper border border-ink-200 rounded-2xl p-3.5 sm:p-4 text-xs leading-relaxed text-ink-800">
-        <div class="flex items-center gap-1.5 font-bold text-amber-900 text-xs mb-1">
-          <span class="text-sm">🗣️</span>
-          <span>Eski Toprak Ne Diyor?</span>
+        <div class="flex items-center justify-between font-bold text-amber-900 text-xs mb-1.5">
+          <div class="flex items-center gap-1.5">
+            <span class="text-sm">🗣️</span>
+            <span>Eski Toprak Ne Diyor?</span>
+            <span class="text-[10px] font-bold text-amber-800 bg-amber-100/80 border border-amber-200/60 px-1.5 py-0.5 rounded-full">333 Nükte</span>
+          </div>
+          <button id="refreshVerdictBtn" type="button" title="Farklı bir nükte göster" class="text-[11px] font-semibold text-amber-800 hover:text-amber-950 flex items-center gap-1 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 px-2.5 py-1 rounded-lg active:scale-95 transition shadow-2xs">
+            <span>🎲</span>
+            <span>Başka Nükte</span>
+          </button>
         </div>
         <p id="verdictText" class="font-serif italic text-sm text-ink-800 leading-normal">
           "Nasreddin Hoca misali: 'Parayı veren düdüğü çalar' demişler ama bu düdük için tam 7 gün masa başında patronun kahrını çekeceksin. Düdüğün sesi o kadar güzel mi bari?"
@@ -556,7 +566,8 @@
       const aboutModal = document.getElementById('aboutModal');
       const closeAboutModalBtn = document.getElementById('closeAboutModalBtn');
 
-      // Toast Element
+      // Elements
+      const refreshVerdictBtn = document.getElementById('refreshVerdictBtn');
       const toast = document.getElementById('toast');
       const toastMsg = document.getElementById('toastMsg');
       const toastIcon = document.getElementById('toastIcon');
@@ -597,62 +608,49 @@
         return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
       }
 
-      // Turkish Humor & Anecdotes Engine based on hours needed
-      function getTurkishHumor(totalHours, fullDays, nameText, formattedTotalHours) {
-        if (totalHours <= 0.5) {
-          const list = [
-            `Nasreddin Hoca misali: 'Ye kürküm ye' dedirtecek bir masraf değil bu. Yaklaşık ${Math.round(totalHours * 60)} dakika helalinden çalış, gönül rahatlığıyla al. Bakkal bile bozuk ararken bu kadar düşünmüyor!`,
-            `Bektaşi'ye sormuşlar: 'Dünyada en tatlı şey nedir?' diye; 'Helal lokma' demiş. Yarım saatlik mesaiye helal olsun, afiyetle harca gitsin!`
-          ];
-          return list[Math.floor(Math.random() * list.length)];
-        } 
+      // 333 Turkish Humor & Anecdotes Engine based on hours and days needed
+      let currentTierKey = 't1';
+      let currentTierList = [];
+
+      function getTurkishHumor(totalHours, fullDays, nameText, formattedTotalHours, totalMinutesNeeded) {
+        // Determine Tier
+        let tier = 't1';
+        if (totalHours <= 1) {
+          tier = 't1'; // 0 - 1 saat (40 adet)
+        } else if (totalHours <= 4) {
+          tier = 't2'; // 1 - 4 saat (40 adet)
+        } else if (fullDays < 1) {
+          tier = 't3'; // 4 - 8 saat / 1 gün (40 adet)
+        } else if (fullDays < 4) {
+          tier = 't4'; // 1 - 3 gün (45 adet)
+        } else if (fullDays < 8) {
+          tier = 't5'; // 3 - 7 gün (45 adet)
+        } else if (fullDays < 15) {
+          tier = 't6'; // 7 - 15 gün / yarım ay (45 adet)
+        } else if (fullDays <= 30) {
+          tier = 't7'; // 15 - 30 gün / 1 ay (40 adet)
+        } else {
+          tier = 't8'; // 30+ gün / aylar (38 adet)
+        }
+
+        currentTierKey = tier;
+        const db = window.NUKTELER_DATA || {};
+        const list = db[tier] || [];
+        currentTierList = list;
+
+        if (!list || list.length === 0) {
+          return `Nasreddin Hoca misali: 'Parayı veren düdüğü çalar' demişler ama bu düdük için ${formattedTotalHours} saat çalışmaya değer mi?`;
+        }
+
+        const raw = list[Math.floor(Math.random() * list.length)];
         
-        if (totalHours <= 4) {
-          const list = [
-            `Atalarımız 'Ayağını yorganına göre uzat' demiş ama bu harcamada ayak dışarıda kalmaz; olsa olsa serçe parmağın üşür. ${Math.round(totalHours)} saatlik emeğine sağlık!`,
-            `Hoca göle maya çalmış ya hani 'Ya tutarsa?' diye... Bu harcama bütçeyi delmez ama günün yarısını buna vereceksin. Akşam eve dönerken vicdanın rahat olsun.`
-          ];
-          return list[Math.floor(Math.random() * list.length)];
-        }
-
-        if (fullDays < 1) {
-          const list = [
-            `Bir koca iş günün buharlaştı! Sabah kurduğun alarm, yoldaki trafik, patronun o malum bakışı... Hepsi bu harcama içindi. Değer diyorsan güle güle kullan!`,
-            `Temel'e sormuşlar: 'Günde kaç saat çalışıyorsun?' Temel demiş: 'Valla bazen çalışıyorum, bazen de paramın nereye gittiğine şaşırıyorum.' İşte tam o gündeyiz!`
-          ];
-          return list[Math.floor(Math.random() * list.length)];
-        }
-
-        if (fullDays < 4) {
-          const list = [
-            `Parayı veren düdüğü çalar demiş Hoca. Ama bu düdük için tam ${fullDays} gün masa başında ter döküp patronun kahrını çekeceksin. Düdüğün sesi o kadar güzel mi bari?`,
-            `Nasreddin Hoca eşeğe ters binmiş ya, 'Önümü göremesem de arkamı kolluyorum' diye. Sen de bunu alırken arkana iyi bak, ay sonu el sallıyor!`
-          ];
-          return list[Math.floor(Math.random() * list.length)];
-        }
-
-        if (fullDays < 15) {
-          const list = [
-            `Neredeyse yarım ay! Bektaşi'ye sormuşlar 'Ramazan nasıl geçti?' diye, 'O bana sorsun, iflahımı kesti' demiş. Bu harcama da maaşın iflahını kesecek gibi! ${formattedTotalHours} saat mesaiye gerçekten değer mi?`,
-            `Evliya Çelebi bu kadar yol gezmedi, sen bu kadar mesaiyi buna yatırıyorsun! Almadan önce bir gece yastığa başını koyup derin bir nefes al.`
-          ];
-          return list[Math.floor(Math.random() * list.length)];
-        }
-
-        if (fullDays <= 26) {
-          const list = [
-            `Bütün bir ayın emeği uçtu gitti! Hoca'nın kazanı bu sefer kesin öldü. Bir koca ayı sabahın köründe kalkıp sırf buna çalışmış olacaksın. 'Aç ayı oynamaz' derler ama sen bir ay bunun kutusuna bakıp doyacaksın gibi!`,
-            `Temel doktora gitmiş: 'Doktor bey, nereye dokunsam ağrıyor.' Doktor 'Parmağın kırık' demiş. Senin de cüzdan kırılmış haberin yok! Koca bir ay sadece buna gitti.`
-          ];
-          return list[Math.floor(Math.random() * list.length)];
-        }
-
-        // Over 1 month / Huge items
-        const list = [
-          `Amanın! Ayların emeği! Hoca'nın türbesindeki kilit bile bu harcamayı durduramaz. Ev sahibi kapıya dayanırsa 'Kira yerine ömrümden ${Math.round(fullDays / 22)} ay versem sayılır mı?' dersin artık!`,
-          `Atalarımız 'Damlaya damlaya göl olur' demişti ama bu doğrudan barajı patlattı! ${formattedTotalHours} saat çalışmak ne demek? Alıyorsan hayırlı olsun ama kalbine mukayyet ol!`
-        ];
-        return list[Math.floor(Math.random() * list.length)];
+        // Fill dynamic placeholders
+        const daysLabel = fullDays > 0 ? `${fullDays} iş günü` : `${totalMinutesNeeded} dakika`;
+        return raw
+          .replace(/\{minutes\}/g, totalMinutesNeeded.toLocaleString('tr-TR'))
+          .replace(/\{hours\}/g, formattedTotalHours)
+          .replace(/\{days\}/g, daysLabel)
+          .replace(/\{name\}/g, nameText);
       }
 
       // Load & Render Presets
@@ -796,7 +794,7 @@
 
         // Humor & Verdict generator
         const displayName = prodName ? `"${prodName}"` : 'bu harcama';
-        currentVerdictClean = getTurkishHumor(totalHoursNeeded, fullDays, displayName, formattedTotalHours);
+        currentVerdictClean = getTurkishHumor(totalHoursNeeded, fullDays, displayName, formattedTotalHours, totalMinutesNeeded);
         verdictText.textContent = `"${currentVerdictClean}"`;
 
         // Save preferences
@@ -852,6 +850,35 @@
         if (cur < 24) {
           dailyHoursInput.value = Math.min(24, cur + 0.5);
           calculate();
+        }
+      });
+
+      // Refresh / Cycle Anecdote Button (🎲 333 Nükte)
+      refreshVerdictBtn.addEventListener('click', () => {
+        const salary = parseNumber(salaryInput.value);
+        const dailyHours = parseFloat(dailyHoursInput.value) || 8;
+        const workDaysPerWeek = parseInt(workDaysSelect.value) || 5;
+        const price = parseNumber(productPriceInput.value);
+        const prodName = productNameInput.value.trim();
+
+        const monthlyWorkDays = workDaysPerWeek * (52 / 12);
+        const monthlyTotalWorkHours = monthlyWorkDays * dailyHours;
+        const hourlyWage = monthlyTotalWorkHours > 0 ? salary / monthlyTotalWorkHours : 0;
+        if (hourlyWage <= 0 || price <= 0) return;
+
+        const totalHoursNeeded = price / hourlyWage;
+        const totalMinutesNeeded = Math.round(totalHoursNeeded * 60);
+        const fullDays = Math.floor(totalHoursNeeded / dailyHours);
+        let formattedTotalHours = totalHoursNeeded >= 100 
+          ? Math.round(totalHoursNeeded).toLocaleString('tr-TR')
+          : totalHoursNeeded.toLocaleString('tr-TR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+        const displayName = prodName ? `"${prodName}"` : 'bu harcama';
+        currentVerdictClean = getTurkishHumor(totalHoursNeeded, fullDays, displayName, formattedTotalHours, totalMinutesNeeded);
+        verdictText.textContent = `"${currentVerdictClean}"`;
+        showToast('Başka bir nükte gösterildi 🎲', '🗣️');
+        if (!shareModal.classList.contains('hidden')) {
+          drawShareImage();
         }
       });
 

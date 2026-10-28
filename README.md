@@ -47,7 +47,7 @@ Sistem sonucu kullanıcıya iki farklı perspektiften aynı anda sunar:
 
 * ☀️ **Doğal ve Sıcak Açık Tema:** Yapay zekâ klişesi olan karanlık modlar ve neon ışıklar yerine; gözü yormayan sıcak kâğıt tonları (`#fbfaf8`), zarif amber detaylar ve yüksek kaliteli editoryal tipografi.
 * 📱 **Mobile-First & Kusursuz Responsive:** Mobil cihazlarda tek elle hızlı giriş için tasarlanmış; masaüstü geniş ekranlarda ise ferah, ortalanmış ve dengeli bir kart yerleşimi sunar.
-* 🎭 **Kültürel Mizah Motoru:** Harcama seviyesine göre (ufak bir simit-çaydan, otomobil peşinatına kadar) dinamik olarak devreye giren küfürsüz, ince Nasreddin Hoca fıkraları ve halk hikâyeleri.
+* 🎭 **333 Özgün Nükteli Kültürel Mizah Motoru:** Harcama seviyesine göre (ufak bir simit-çaydan, aylar süren büyük yatırımlara kadar 8 kademede) dinamik olarak devreye giren küfürsüz, ince Nasreddin Hoca, Bektaşi, Temel fıkraları ve Türk çarşı/esnaf nükteleri. Tek tıkla `🎲 Başka Nükte` butonuyla değiştirilebilir.
 * 💼 **Sadeleştirilmiş Maaş Yönetimi:** Gelir ve mesai bilgileri girildikten sonra form kalabalığı gizlenir; sayfada sadece tek satırlık zarif bir özet ve `[Düzenle]` butonu yer alır.
 * 🏷️ **Dinamik Örnekler & Özel Harcama Ekleme:** Standart örneklere ek olarak kullanıcı `+ Kendi Örneğini Ekle` modalı üzerinden dilediği harcama kalemini kaydedebilir. Bu kayıtlar tarayıcının yerel belleğinde saklanır.
 * 📸 **Görsel Paylaşım Kartı Üreticisi (HTML5 Canvas):**
