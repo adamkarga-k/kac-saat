@@ -257,32 +257,13 @@
 
       <!-- Dynamic Turkish Humor & Witty Verdict Box -->
       <div id="verdictBox" class="mt-4 bg-paper border border-ink-200 rounded-2xl p-3.5 sm:p-4 text-xs leading-relaxed text-ink-800">
-        <div class="flex items-center justify-between font-bold text-amber-900 text-xs mb-1.5">
-          <div class="flex items-center gap-1.5">
-            <span class="text-sm">🗣️</span>
-            <span>Eski Toprak Ne Diyor?</span>
-            <span class="text-[10px] font-bold text-amber-800 bg-amber-100/80 border border-amber-200/60 px-1.5 py-0.5 rounded-full">333 Nükte</span>
-          </div>
-          <button id="refreshVerdictBtn" type="button" title="Farklı bir nükte göster" class="text-[11px] font-semibold text-amber-800 hover:text-amber-950 flex items-center gap-1 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 px-2.5 py-1 rounded-lg active:scale-95 transition shadow-2xs">
-            <span>🎲</span>
-            <span>Başka Nükte</span>
-          </button>
+        <div class="flex items-center gap-1.5 font-bold text-amber-900 text-xs mb-1">
+          <span class="text-sm">🗣️</span>
+          <span>Eski Toprak Ne Diyor?</span>
         </div>
         <p id="verdictText" class="font-serif italic text-sm text-ink-800 leading-normal">
           "Nasreddin Hoca misali: 'Parayı veren düdüğü çalar' demişler ama bu düdük için tam 7 gün masa başında patronun kahrını çekeceksin. Düdüğün sesi o kadar güzel mi bari?"
         </p>
-      </div>
-
-      <!-- Context Metric Badges -->
-      <div class="grid grid-cols-2 gap-2.5 mt-3 pt-3 border-t border-ink-100">
-        <div class="bg-ink-100/60 rounded-xl p-2.5">
-          <span class="text-[10px] text-ink-500 block font-medium">Hafta Sonu Dahil Geçen Süre</span>
-          <strong id="calendarTimeDisplay" class="text-xs font-bold text-ink-900">~1.4 Hafta</strong>
-        </div>
-        <div class="bg-ink-100/60 rounded-xl p-2.5">
-          <span class="text-[10px] text-ink-500 block font-medium">Dakikanın Değeri</span>
-          <strong id="minuteRateDisplay" class="text-xs font-bold text-emerald-800 font-mono">₺4.26 / dk</strong>
-        </div>
       </div>
 
       <!-- Action Buttons: Share & Image Generator -->
@@ -542,8 +523,6 @@
       const salaryPercentDisplay = document.getElementById('salaryPercentDisplay');
       const salaryProgressBar = document.getElementById('salaryProgressBar');
       const verdictText = document.getElementById('verdictText');
-      const calendarTimeDisplay = document.getElementById('calendarTimeDisplay');
-      const minuteRateDisplay = document.getElementById('minuteRateDisplay');
 
       const copyShareBtn = document.getElementById('copyShareBtn');
       const copyBtnText = document.getElementById('copyBtnText');
@@ -572,8 +551,7 @@
       const aboutModal = document.getElementById('aboutModal');
       const closeAboutModalBtn = document.getElementById('closeAboutModalBtn');
 
-      // Elements
-      const refreshVerdictBtn = document.getElementById('refreshVerdictBtn');
+      // Toast Element
       const toast = document.getElementById('toast');
       const toastMsg = document.getElementById('toastMsg');
       const toastIcon = document.getElementById('toastIcon');
@@ -745,7 +723,7 @@
           totalMinutesDisplay.textContent = '(0 dakika)';
           salaryPercentDisplay.textContent = '%0';
           salaryProgressBar.style.width = '0%';
-          calendarTimeDisplay.textContent = '0 gün';
+          calendarSubtextValue.textContent = '0 gün';
           verdictText.textContent = 'Lütfen geçerli bir maaş ve harcama fiyatı girin.';
           currentVerdictClean = '';
           return;
@@ -807,18 +785,6 @@
         currentRealLifeText = formatRealLifeCalendarTime(fullDays, workDaysPerWeek);
         calendarSubtextValue.textContent = currentRealLifeText;
 
-        // Calendar duration estimation for metric badge
-        const calendarDays = (fullDays / workDaysPerWeek) * 7 + (fullDays % workDaysPerWeek);
-        if (calendarDays < 1) {
-          calendarTimeDisplay.textContent = 'Aynı gün içinde';
-        } else if (calendarDays < 7) {
-          calendarTimeDisplay.textContent = `~${Math.round(calendarDays)} Gün`;
-        } else if (calendarDays < 30) {
-          calendarTimeDisplay.textContent = `~${(calendarDays / 7).toFixed(1)} Hafta`;
-        } else {
-          calendarTimeDisplay.textContent = `~${(calendarDays / 30.4).toFixed(1)} Ay`;
-        }
-
         // Humor & Verdict generator
         const displayName = prodName ? `"${prodName}"` : 'bu harcama';
         currentVerdictClean = getTurkishHumor(totalHoursNeeded, fullDays, displayName, formattedTotalHours, totalMinutesNeeded);
@@ -877,35 +843,6 @@
         if (cur < 24) {
           dailyHoursInput.value = Math.min(24, cur + 0.5);
           calculate();
-        }
-      });
-
-      // Refresh / Cycle Anecdote Button (🎲 333 Nükte)
-      refreshVerdictBtn.addEventListener('click', () => {
-        const salary = parseNumber(salaryInput.value);
-        const dailyHours = parseFloat(dailyHoursInput.value) || 8;
-        const workDaysPerWeek = parseInt(workDaysSelect.value) || 5;
-        const price = parseNumber(productPriceInput.value);
-        const prodName = productNameInput.value.trim();
-
-        const monthlyWorkDays = workDaysPerWeek * (52 / 12);
-        const monthlyTotalWorkHours = monthlyWorkDays * dailyHours;
-        const hourlyWage = monthlyTotalWorkHours > 0 ? salary / monthlyTotalWorkHours : 0;
-        if (hourlyWage <= 0 || price <= 0) return;
-
-        const totalHoursNeeded = price / hourlyWage;
-        const totalMinutesNeeded = Math.round(totalHoursNeeded * 60);
-        const fullDays = Math.floor(totalHoursNeeded / dailyHours);
-        let formattedTotalHours = totalHoursNeeded >= 100 
-          ? Math.round(totalHoursNeeded).toLocaleString('tr-TR')
-          : totalHoursNeeded.toLocaleString('tr-TR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-
-        const displayName = prodName ? `"${prodName}"` : 'bu harcama';
-        currentVerdictClean = getTurkishHumor(totalHoursNeeded, fullDays, displayName, formattedTotalHours, totalMinutesNeeded);
-        verdictText.textContent = `"${currentVerdictClean}"`;
-        showToast('Başka bir nükte gösterildi 🎲', '🗣️');
-        if (!shareModal.classList.contains('hidden')) {
-          drawShareImage();
         }
       });
 
